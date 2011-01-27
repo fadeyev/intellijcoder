@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MakeItEasy">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/make-it-easy-3.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
