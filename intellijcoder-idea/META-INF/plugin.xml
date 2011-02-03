@@ -1,9 +1,9 @@
-<idea-plugin version="2">
+<idea-plugin version="2" url="http://code.google.com/p/intellijcoder">
   <name>IntelliJCoder</name>
-  <description>Plugin for participating in TopCoder Algorithm competitions using IntelliJ IDEA as an editor.</description>
+  <description>An IntelliJ IDEA plugin for participating in TopCoder Algorithm contests.</description>
   <version>1.0</version>
   <vendor email="Konstantin.Fadeyev@gmail.com">Konstantin Fadeyev</vendor>
-  <idea-version since-build="8000"/>
+  <idea-version since-build="99.18"/>
   <depends>JUnit</depends>
 
   <application-components>

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="57bbdac4-5fef-4608-b938-4ad226380ca5" name="Default" comment="" />
+    <list default="true" readonly="true" id="57bbdac4-5fef-4608-b938-4ad226380ca5" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intellijcoder-idea/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/intellijcoder-idea/META-INF/plugin.xml" />
+    </list>
     <ignored path="IntellijCoder.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -80,7 +85,17 @@
     <favorites_list name="IntellijCoder" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="plugin.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/intellijcoder-idea/META-INF/plugin.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="14" column="55" selection-start="484" selection-end="484" vertical-scroll-proportion="0.7">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -108,8 +123,8 @@
         <option value="$PROJECT_DIR$/intellijcoder/test/intellijcoder/ipc/ClientServerIntegrationTest.java" />
         <option value="$PROJECT_DIR$/intellijcoder-idea/src/intellijcoder/idea/Injector.java" />
         <option value="$PROJECT_DIR$/intellijcoder/src/intellijcoder/workspace/WorkspaceManager.java" />
-        <option value="$PROJECT_DIR$/intellijcoder-idea/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/intellijcoder-idea/src/intellijcoder/idea/IntelliJIDEA.java" />
+        <option value="$PROJECT_DIR$/intellijcoder-idea/META-INF/plugin.xml" />
       </list>
     </option>
   </component>
@@ -146,7 +161,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Favorites" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -155,8 +169,34 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="IntelliJCoder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="intellijcoder-idea" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="IntelliJCoder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="intellijcoder-idea" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="META-INF" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Favorites" />
+      <pane id="PackagesPane" />
       <pane id="Scope">
         <subPane subId="Problems" />
         <subPane subId="Project Files">
@@ -168,7 +208,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -421,6 +460,37 @@
     <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
     <configuration useDefault="true">C:\Documents and Settings\Konstantin\Application Data\Subversion</configuration>
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="SvnFileUrlMappingImpl">
+    <option name="myMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\Kostya\Development\svntest\intellijcoder\.idea" />
+          <option name="myCopyRoot" value="D:\Kostya\Development\svntest\intellijcoder\.idea" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\Kostya\Development\svntest\intellijcoder" />
+          <option name="myCopyRoot" value="D:\Kostya\Development\svntest\intellijcoder" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\Kostya\Development\svntest\intellijcoder\intellijcoder-idea" />
+          <option name="myCopyRoot" value="D:\Kostya\Development\svntest\intellijcoder\intellijcoder-idea" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\Kostya\Development\svntest\intellijcoder\intellijcoder" />
+          <option name="myCopyRoot" value="D:\Kostya\Development\svntest\intellijcoder\intellijcoder" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+    <option name="myMoreRealMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\Kostya\Development\svntest\intellijcoder" />
+          <option name="myCopyRoot" value="D:\Kostya\Development\svntest\intellijcoder" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -454,25 +524,25 @@
     <frame x="-4" y="-4" width="1032" height="716" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.329806" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24979724" sideWeight="0.9477521" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5714286" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="FindBugs-IDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22222222" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23633157" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19753087" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32958034" sideWeight="0.8536155" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39918116" sideWeight="0.8377425" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="ScratchPad" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4912999" sideWeight="0.9876543" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23439099" sideWeight="0.8077601" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17502558" sideWeight="0.67019403" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19223987" sideWeight="0.99757284" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23809524" sideWeight="0.99757284" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Atlassian " active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21628189" sideWeight="0.0" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14991182" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23633157" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Repositories" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.41622576" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25030378" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -583,70 +653,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/intellijcoder-idea/src/intellijcoder/idea/IntelliJIDEA.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="53" selection-start="6039" selection-end="6039" vertical-scroll-proportion="0.034623217">
-          <folding />
-        </state>
+        <state line="131" column="53" selection-start="6039" selection-end="6039" vertical-scroll-proportion="0.034623217" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intellijcoder/test/intellijcoder/ipc/FakeWorkspaceManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="696" selection-end="696" vertical-scroll-proportion="0.2729124">
-          <folding />
-        </state>
+        <state line="22" column="0" selection-start="696" selection-end="696" vertical-scroll-proportion="0.2729124" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intellijcoder/src/intellijcoder/workspace/IdeWorkspaceManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="44" selection-start="372" selection-end="372" vertical-scroll-proportion="0.16502947">
-          <folding />
-        </state>
+        <state line="12" column="44" selection-start="372" selection-end="372" vertical-scroll-proportion="0.16502947" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intellijcoder/src/intellijcoder/workspace/WorkspaceManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="48" selection-start="224" selection-end="224" vertical-scroll-proportion="0.3256705">
-          <folding />
-        </state>
+        <state line="10" column="48" selection-start="224" selection-end="224" vertical-scroll-proportion="0.3256705" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intellijcoder/src/intellijcoder/arena/IntelliJCoderArenaPlugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="30" selection-start="1891" selection-end="1891" vertical-scroll-proportion="0.033398822">
-          <folding />
-        </state>
+        <state line="52" column="30" selection-start="1891" selection-end="1891" vertical-scroll-proportion="0.033398822" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intellijcoder/test/intellijcoder/arena/IntelliJCoderArenaPluginTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="135" column="33" selection-start="6210" selection-end="6210" vertical-scroll-proportion="0.032258064">
-          <folding />
-        </state>
+        <state line="135" column="33" selection-start="6210" selection-end="6210" vertical-scroll-proportion="0.032258064" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intellijcoder/test/intellijcoder/ipc/ClientServerIntegrationTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="136" column="56" selection-start="5830" selection-end="5830" vertical-scroll-proportion="0.032258064">
-          <folding />
-        </state>
+        <state line="136" column="56" selection-start="5830" selection-end="5830" vertical-scroll-proportion="0.032258064" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intellijcoder/src/intellijcoder/workspace/TestCodeBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="52" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.032258064">
-          <folding />
-        </state>
+        <state line="37" column="52" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.032258064" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intellijcoder-idea/src/intellijcoder/idea/Injector.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="38" selection-start="2463" selection-end="2463" vertical-scroll-proportion="0.032258064">
-          <folding />
-        </state>
+        <state line="64" column="38" selection-start="2463" selection-end="2463" vertical-scroll-proportion="0.032258064" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intellijcoder-idea/META-INF/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="2" selection-start="57" selection-end="57" vertical-scroll-proportion="0.034623217">
+        <state line="14" column="55" selection-start="484" selection-end="484" vertical-scroll-proportion="0.7">
           <folding />
         </state>
       </provider>
@@ -654,82 +706,9 @@
   </component>
   <component name="masterDetails">
     <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <last-edited>intellijcoder:jar</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.119474314" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
       <state key="Copyright.UI">
         <settings>
           <splitter-proportions />
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <last-edited>Android</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.119474314" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.119474314" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>IDEA IC-99.32 (1)</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.119474314" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <last-edited>intellijcoder</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.119474314" />
-                <option value="0.5" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <last-edited>MakeItEasy</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.119474314" />
-              </list>
-            </option>
-          </splitter-proportions>
         </settings>
       </state>
       <state key="ScopeChooserConfigurable.UI">
