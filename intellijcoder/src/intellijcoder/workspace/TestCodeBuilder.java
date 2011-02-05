@@ -67,6 +67,9 @@ public class TestCodeBuilder extends CodeBuilder {
         if(type.contains("[")) {
             return "new " + type + " " + value;
         }
+        if(type.equals("long")) {
+            return value + "L";
+        }
         return value;
     }
 

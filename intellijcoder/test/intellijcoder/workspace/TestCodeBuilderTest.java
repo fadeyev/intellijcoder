@@ -2,7 +2,6 @@ package intellijcoder.workspace;
 
 import intellijcoder.model.Problem;
 import intellijcoder.model.TestCase;
-import intellijcoder.workspace.TestCodeBuilder;
 import org.junit.Test;
 
 import static com.natpryce.makeiteasy.MakeItEasy.*;
@@ -82,7 +81,7 @@ public class TestCodeBuilderTest {
 
     @Test
     public void usesArrayCreationSyntaxWhenParamTypeIsArray() throws Exception {
-        TestCase testCase = make(a(TestCase, with(input, new String[] {"{1, 2}"}), with(output, someValue())));
+        TestCase testCase = make(a(TestCase, with(input, new String[] {"{1, 2}"})));
         Problem problem = make(a(Problem,
                 with(paramTypes, new String[] {"int[]"}), with(paramNames, new String[]{"intervals"}),
                 with(testCases, new TestCase[]{ testCase })));
@@ -94,11 +93,34 @@ public class TestCodeBuilderTest {
 
     @Test
     public void usesArrayCreationSyntaxOnOutputWhenReturnTypeIsArray() throws Exception {
-        TestCase testCase = make(a(TestCase, with(input, new String[] {someValue()}), with(output, "{1, 2}")));
+        TestCase testCase = make(a(TestCase, with(output, "{1, 2}")));
         Problem problem = make(a(Problem, with(returnType, "int[]"),
                 with(testCases, new TestCase[]{ testCase })));
         final String[] expectedTemplate = {
                 "public void test0()", "{", "assertArrayEquals(new int[]", "{1, 2}", ")" , "}"
+        };
+        verifyGeneratedTestClassTemplate(problem, expectedTemplate);
+    }
+
+    @Test
+    public void usesLongLiteralForOutputValueOfLongType() throws Exception {
+        TestCase testCase = make(a(TestCase, with(output, "9876543210")));
+        Problem problem = make(a(Problem, with(returnType, "long"),
+                with(testCases, new TestCase[]{ testCase })));
+        final String[] expectedTemplate = {
+                "public void test0()", "{", "assertEquals(", "9876543210L", ")" , "}"
+        };
+        verifyGeneratedTestClassTemplate(problem, expectedTemplate);
+    }
+
+    @Test
+    public void usesLongLiteralForParamValueOfLongType() throws Exception {
+        TestCase testCase = make(a(TestCase, with(input, new String[] {"9876543210"})));
+        Problem problem = make(a(Problem,
+                with(paramTypes, new String[] {"long"}), with(paramNames, new String[]{"interval"}),
+                with(testCases, new TestCase[]{ testCase })));
+        final String[] expectedTemplate = {
+                "public void test0()", "{",  "interval", "=", "9876543210L" , "}"
         };
         verifyGeneratedTestClassTemplate(problem, expectedTemplate);
     }
@@ -122,9 +144,5 @@ public class TestCodeBuilderTest {
 
     private String someType() {
         return "some type";
-    }
-
-    private String someValue() {
-        return "output1";
     }
 }
