@@ -124,15 +124,23 @@ public class IntelliJIDEA implements Ide {
         PsiJavaFile classFile = moduleCreator.getClassFile();
         PsiJavaFile testFile = moduleCreator.getTestFile();
 
-        ProjectView.getInstance(project).selectPsiElement(testFile, false);
-        ProjectView.getInstance(project).selectPsiElement(classFile, false);
+
+        selectFileInProjectView(project, classFile);
 
         //noinspection ConstantConditions
         FileEditorManager.getInstance(project).openFile(classFile.getVirtualFile(), true);
 
-        RunnerAndConfigurationSettings settings = createConfiguration(project, module, testFile);
-        setConfigurationAsCurrent(project, settings);
-        executeConfiguration(project, settings);
+        createAndRunConfiguration(project, module, testFile);
+    }
+
+    /**
+     * WARNING!!! This method uses some proprietary IDEA classes,
+     * hence vulnerable to IDEA version changes
+     * @param project current project
+     * @param classFile file to select
+     */
+    private void selectFileInProjectView(Project project, PsiJavaFile classFile) {
+        ProjectView.getInstance(project).selectPsiElement(classFile, false);
     }
 
     private void checkIfModuleRootDirectoryAlreadyExists(Project project, String moduleName) throws IntelliJCoderException {
@@ -163,6 +171,19 @@ public class IntelliJIDEA implements Ide {
         return false;
     }
 
+    /**
+     * WARNING!!! This method uses some proprietary IDEA classes,
+     * hence vulnerable to IDEA version changes
+     * @param project current project
+     * @param module module
+     * @param testFile class file
+     */
+    private void createAndRunConfiguration(Project project, Module module, PsiJavaFile testFile) {
+        RunnerAndConfigurationSettings settings = createConfiguration(project, module, testFile);
+        setConfigurationAsCurrent(project, settings);
+        executeConfiguration(project, settings);
+    }
+
     private void executeConfiguration(Project project, RunnerAndConfigurationSettings settings) {
         Executor executor = ExecutorRegistry.getInstance().getExecutorById(DefaultRunExecutor.EXECUTOR_ID);
         ProgramRunnerUtil.executeConfiguration(project, settings, executor);
@@ -183,7 +204,6 @@ public class IntelliJIDEA implements Ide {
         PsiClass testClass = JUnitUtil.getTestClass(testClassFile);
         configuration.beClassConfiguration(testClass);
         configuration.restoreOriginalModule(module);
-        RunConfigurationExtension.patchCreatedConfiguration(configuration);
         return settings;
     }
 
