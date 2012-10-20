@@ -10,7 +10,7 @@ import intellijcoder.workspace.IdeWorkspaceManager;
 import intellijcoder.workspace.SolutionCodeBuilder;
 import intellijcoder.workspace.TestCodeBuilder;
 import intellijcoder.arena.ArenaProcessLauncher;
-import intellijcoder.arena.ArenaJarProvider;
+import intellijcoder.arena.ArenaJarDownloader;
 import intellijcoder.os.DebugProcessLauncher;
 import intellijcoder.os.FileSystem;
 import intellijcoder.os.Network;
@@ -27,7 +27,7 @@ public class Injector {
     static synchronized IntelliJCoderApplication injectIntelliJCoderApplication() {
         if(intelliJCoderInstance == null) {
             intelliJCoderInstance = new IntelliJCoderApplication(
-                injectArenaJarProvider(),
+                injectArenaAppletProvider(),
                 injectArenaProcessLauncher(),
                 injectIntelliJCoderServer(),
                 injectArenaConfigManager());
@@ -52,8 +52,16 @@ public class Injector {
         return new ArenaConfigManager(injectFileSystem(), PathUtil.getJarPathForClass(IntelliJCoderArenaPlugin.class));
     }
 
-    private static ArenaJarProvider injectArenaJarProvider() {
-        return new ArenaJarProvider(injectNetwork(), injectFileSystem());
+    private static ArenaAppletProvider injectArenaAppletProvider() {
+        return new ArenaAppletProvider(injectNetwork(), injectArenaFileParser(), injectArenaJarDownloader());
+    }
+
+    private static ArenaFileParser injectArenaFileParser() {
+        return new ArenaFileParser();
+    }
+
+    private static ArenaJarDownloader injectArenaJarDownloader() {
+        return new ArenaJarDownloader(injectNetwork(), injectFileSystem());
     }
 
     private static ProcessLauncher injectProcessLauncher() {

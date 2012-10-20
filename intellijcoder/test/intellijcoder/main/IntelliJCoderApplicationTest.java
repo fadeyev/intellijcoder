@@ -1,10 +1,9 @@
 package intellijcoder.main;
 
+import intellijcoder.arena.ArenaAppletInfo;
+import intellijcoder.arena.ArenaAppletProvider;
 import intellijcoder.arena.ArenaConfigManager;
-import intellijcoder.arena.ArenaJarProvider;
 import intellijcoder.arena.ArenaProcessLauncher;
-import intellijcoder.main.IntelliJCoderApplication;
-import intellijcoder.main.IntelliJCoderException;
 import intellijcoder.ipc.IntelliJCoderServer;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -29,11 +28,11 @@ public class IntelliJCoderApplicationTest {
     private Sequence serverStartSequence = context.sequence("startServer");
     private Sequence editConfigSequence = context.sequence("editConfig");
 
-    private ArenaJarProvider jarProvider = context.mock(ArenaJarProvider.class);
+    private ArenaAppletProvider appletProvider = context.mock(ArenaAppletProvider.class);
     private IntelliJCoderServer server = context.mock(IntelliJCoderServer.class);
     private ArenaConfigManager configManager = context.mock(ArenaConfigManager.class);
     private ArenaProcessLauncher arenaLauncher = context.mock(ArenaProcessLauncher.class);
-    private IntelliJCoderApplication application = new IntelliJCoderApplication(jarProvider, arenaLauncher, server, configManager);
+    private IntelliJCoderApplication application = new IntelliJCoderApplication(appletProvider, arenaLauncher, server, configManager);
 
 
     @Test
@@ -41,8 +40,8 @@ public class IntelliJCoderApplicationTest {
         context.checking(new Expectations() {{
             oneOf(server).start();  inSequence(serverStartSequence);
             oneOf(configManager).setIntelliJCoderAsADefaultEditor(); inSequence(editConfigSequence);
-            oneOf(arenaLauncher).launch(with(any(String.class)), with(any(Integer.class)));   inSequence(serverStartSequence); inSequence(editConfigSequence);
-            ignoring(jarProvider);
+            oneOf(arenaLauncher).launch(with(any(ArenaAppletInfo.class)), with(any(Integer.class)));   inSequence(serverStartSequence); inSequence(editConfigSequence);
+            ignoring(appletProvider);
         }});
         application.launch();
     }
@@ -51,8 +50,8 @@ public class IntelliJCoderApplicationTest {
     public void arenaApplicationGetsTheSamePortValueAsServer() throws IOException, IntelliJCoderException {
         context.checking(new Expectations() {{
             oneOf(server).start();  will(returnValue(1000));
-            oneOf(arenaLauncher).launch(with(any(String.class)), with(equal(1000)));
-            ignoring(jarProvider);
+            oneOf(arenaLauncher).launch(with(any(ArenaAppletInfo.class)), with(equal(1000)));
+            ignoring(appletProvider);
             ignoring(configManager);
         }});
         application.launch();
@@ -60,9 +59,11 @@ public class IntelliJCoderApplicationTest {
 
     @Test
     public void startsApplicationProvidedByProvider() throws IOException, IntelliJCoderException {
+        final ArenaAppletInfo arenaAppletInfo = new ArenaAppletInfo();
+
         context.checking(new Expectations() {{
-            allowing(jarProvider).getJarFilePath(); will(returnValue("applet.jar"));
-            oneOf(arenaLauncher).launch(with(equal("applet.jar")), with(any(Integer.class)));
+            allowing(appletProvider).getApplet(); will(returnValue(arenaAppletInfo));
+            oneOf(arenaLauncher).launch(with(equal(arenaAppletInfo)), with(any(Integer.class)));
             ignoring(configManager);
             ignoring(server);
         }});
@@ -73,8 +74,8 @@ public class IntelliJCoderApplicationTest {
     public void forTwoLaunchesOnlyOneServerStartedButTwoArenaApplications() throws Exception {
         context.checking(new Expectations(){{
             oneOf(server).start(); will(returnValue(1000));
-            exactly(2).of(arenaLauncher).launch(with(any(String.class)), with(equal(1000)));
-            ignoring(jarProvider);
+            exactly(2).of(arenaLauncher).launch(with(any(ArenaAppletInfo.class)), with(equal(1000)));
+            ignoring(appletProvider);
             ignoring(configManager);
         }});
         application.launch();

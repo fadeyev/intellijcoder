@@ -139,7 +139,7 @@ public class ClientServerIntegrationTest {
             allowing(inputComponentModel).getMethodName();   will(returnValue("multiply"));
             allowing(inputComponentModel).getParamTypes();   will(returnValue(new DataType[0]));
             allowing(inputComponentModel).getParamNames();   will(returnValue(new String[0]));
-            allowing(inputComponentModel).getTestCases();    will(returnValue(new com.topcoder.shared.problem.TestCase[] {new com.topcoder.shared.problem.TestCase(new String[0], "1", false)}));
+            allowing(inputComponentModel).getTestCases();    will(returnValue(new com.topcoder.shared.problem.TestCase[] {new com.topcoder.shared.problem.TestCase(1, new String[0], "1", false)}));
         }});
         TestCase testCase = make(a(TestCase, with(input, new String[0]), with(output, "1")));
         Problem expectedProblem = make(a(Problem,

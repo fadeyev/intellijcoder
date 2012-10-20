@@ -1,7 +1,17 @@
 <component name="libraryTable">
   <library name="ContestApplet">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/ContestApplet.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/arena-client-7.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/arena-shared-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/basic_type_serialization-1.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client-common-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client-socket-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/compeng-common-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/concurrent-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/custom-serialization-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/encoder-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/http-tunnel-client-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/log4j-1.2.13.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

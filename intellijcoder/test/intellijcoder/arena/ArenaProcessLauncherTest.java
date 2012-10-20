@@ -31,19 +31,22 @@ public class ArenaProcessLauncherTest {
 
     @Test
     public void jarLaunchedInNewProcessWithNecessaryParameters() throws IOException, IntelliJCoderException {
+        ArenaAppletInfo arenaAppletInfo = new ArenaAppletInfo();
+        arenaAppletInfo.addClassPathItem("contestApplet1.jar");
+        arenaAppletInfo.addClassPathItem("contestApplet2.jar");
+        arenaAppletInfo.setMainClass("com.topcoder.client.contestApplet");
+        arenaAppletInfo.addArgument("5001");
+
         context.checking(new Expectations() {{
             oneOf(processLauncher).launch(
                     with(TestUtil.hasItemsInArray(
                             containsString("java"),
-                            equal("-cp"), equal("contestApplet.jar"),
-                            equal("com.topcoder.client.contestApplet.runner.generic"),
+                            equal("-cp"), equal("contestApplet1.jar;contestApplet2.jar"),
+                            equal("com.topcoder.client.contestApplet"),
                             equal("-Dintellijcoder.port=9999"),
-                            equal("www.topcoder.com"),
-                            equal("5001"),
-                            equal("http://tunnel1.topcoder.com/tunnel?dummy"),
-                            equal("TopCoder"))));
+                            equal("5001"))));
         }});
-        arenaLauncher.launch("contestApplet.jar", 9999);
+        arenaLauncher.launch(arenaAppletInfo, 9999);
     }
 
     @Test
@@ -52,18 +55,18 @@ public class ArenaProcessLauncherTest {
             oneOf(processLauncher).launch(with(any(String[].class))); will(throwException(new IOException()));
         }});
         try {
-            arenaLauncher.launch(someJarPath(), somePort());
+            arenaLauncher.launch(someArenaAppletInfo(), somePort());
             fail("launch() should have thrown " + IntelliJCoderException.class.getName());
         } catch (IntelliJCoderException e) {
             assertExceptionMessage(e, ArenaProcessLauncher.FAILED_TO_START_PROCESS_MESSAGE);
         }
     }
 
-    private int somePort() {
-        return 9999;
+    private static ArenaAppletInfo someArenaAppletInfo() {
+        return new ArenaAppletInfo();
     }
 
-    private String someJarPath() {
-        return "ContestApplet.jar";
+    private int somePort() {
+        return 9999;
     }
 }

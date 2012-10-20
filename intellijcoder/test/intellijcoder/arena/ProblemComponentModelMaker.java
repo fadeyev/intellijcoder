@@ -70,6 +70,6 @@ public class ProblemComponentModelMaker {
     }
 
     public static TestCase testCase(String[] testInput, String testOutput) {
-        return new TestCase(testInput, testOutput, false);
+        return new TestCase(1, testInput, testOutput, false);
     }
 }

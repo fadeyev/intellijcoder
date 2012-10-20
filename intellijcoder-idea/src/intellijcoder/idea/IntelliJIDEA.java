@@ -192,7 +192,6 @@ public class IntelliJIDEA implements Ide {
     private void setConfigurationAsCurrent(Project project, RunnerAndConfigurationSettings settings) {
         final RunManagerEx runManager = (RunManagerEx) RunManager.getInstance(project);
         runManager.setTemporaryConfiguration(settings);
-        runManager.setActiveConfiguration(settings);
     }
 
     private RunnerAndConfigurationSettings createConfiguration(Project project, Module module, PsiJavaFile testClassFile) {
