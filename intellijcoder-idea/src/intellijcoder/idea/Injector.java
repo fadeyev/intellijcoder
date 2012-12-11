@@ -2,6 +2,7 @@ package intellijcoder.idea;
 
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.util.PathUtil;
 import intellijcoder.arena.*;
 import intellijcoder.ipc.IntelliJCoderServer;
@@ -24,12 +25,12 @@ public class Injector {
 
     private static IntelliJCoderApplication intelliJCoderInstance;
 
-    static synchronized IntelliJCoderApplication injectIntelliJCoderApplication() {
+    static synchronized IntelliJCoderApplication injectIntelliJCoderApplication(Project project) {
         if(intelliJCoderInstance == null) {
             intelliJCoderInstance = new IntelliJCoderApplication(
                 injectArenaAppletProvider(),
                 injectArenaProcessLauncher(),
-                injectIntelliJCoderServer(),
+                injectIntelliJCoderServer(project),
                 injectArenaConfigManager());
             injectIntelliJIDEAApplication().addApplicationListener(injectIntelliJCoderFinalizer(intelliJCoderInstance));
         }
@@ -68,15 +69,15 @@ public class Injector {
         return new DebugProcessLauncher();
     }
 
-    private static IntelliJCoderServer injectIntelliJCoderServer() {
+    private static IntelliJCoderServer injectIntelliJCoderServer(Project project) {
         return new IntelliJCoderServer(
-                injectWorkspaceManager(),
+                injectWorkspaceManager(project),
                 injectNetwork());
     }
 
-    private static IdeWorkspaceManager injectWorkspaceManager() {
+    private static IdeWorkspaceManager injectWorkspaceManager(Project project) {
         return new IdeWorkspaceManager(
-                injectIDE(),
+                injectIDE(project),
                 injectSolutionCodeBuilder(),
                 injectTestCodeBuilder());
     }
@@ -89,8 +90,8 @@ public class Injector {
         return new SolutionCodeBuilder();
     }
 
-    private static IntelliJIDEA injectIDE() {
-        return new IntelliJIDEA();
+    private static IntelliJIDEA injectIDE(Project project) {
+        return new IntelliJIDEA(project);
     }
 
     private static FileSystem injectFileSystem() {

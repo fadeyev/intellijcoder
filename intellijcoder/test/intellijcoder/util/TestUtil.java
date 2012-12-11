@@ -49,7 +49,7 @@ public class TestUtil {
     }
 
     public static <T> Matcher<T[]> hasItemsInArray(Matcher<T>... items) {
-        Collection<Matcher<? extends T[]>> matchers = new ArrayList<Matcher<? extends T[]>>(items.length);
+        Collection<Matcher<? super T[]>> matchers = new ArrayList<Matcher<? super T[]>>(items.length);
         for (Matcher<T> item : items) {
             matchers.add(hasItemInArray(item));
         }

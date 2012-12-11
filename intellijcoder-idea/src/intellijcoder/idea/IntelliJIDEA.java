@@ -14,6 +14,7 @@ import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.StdModuleTypes;
@@ -40,6 +41,11 @@ import java.io.File;
  */
 public class IntelliJIDEA implements Ide {
     private static final String MESSAGE_BOXES_TITLE = "IntelliJCoder";
+    private Project project;
+
+    public IntelliJIDEA(Project project) {
+        this.project = project;
+    }
 
     public void createModule(final String moduleName, final String classSource, final String testSource) {
         //We run it in the event thread, so the DataContext would have current Project data;
@@ -81,10 +87,13 @@ public class IntelliJIDEA implements Ide {
     }
 
     private Project getCurrentProject() throws IntelliJCoderException {
-                                           // The other option is to save link to current project from inside of action,
-        @SuppressWarnings({"deprecation"}) // but this way is ok for now
-        DataContext dataContext = DataManager.getInstance().getDataContext();
-        Project project = DataKeys.PROJECT.getData(dataContext);
+        //if project was closed
+        if(!project.isInitialized()) {
+            // we try to locate project by currently focused component
+            @SuppressWarnings({"deprecation"})
+            DataContext dataContext = DataManager.getInstance().getDataContext();
+            project = DataKeys.PROJECT.getData(dataContext);
+        }
         if(project == null) {
             throw new IntelliJCoderException("There is no opened project.");
         }
@@ -243,14 +252,13 @@ public class IntelliJIDEA implements Ide {
         }
 
         public ModuleCreator create() {
-            @SuppressWarnings({"ConstantConditions"})
             PsiDirectory projectRoot = PsiManager.getInstance(project).findDirectory(project.getBaseDir());
             assert projectRoot != null;
             PsiDirectory moduleRoot = projectRoot.createSubdirectory(moduleName);
             PsiDirectory sourceRoot = moduleRoot.createSubdirectory("src");
             PsiDirectory testRoot = moduleRoot.createSubdirectory("test");
 
-            module = ModuleManager.getInstance(project).newModule(getModuleFilePath(moduleRoot), StdModuleTypes.JAVA);
+            module = ModuleManager.getInstance(project).newModule(getModuleFilePath(moduleRoot), StdModuleTypes.JAVA.getId());
             configureModule(moduleRoot, sourceRoot, testRoot);
 
             classFile = createFile(project, sourceRoot, classFileName(moduleName), classSource);
@@ -260,7 +268,7 @@ public class IntelliJIDEA implements Ide {
         }
 
         private PsiJavaFile createFile(Project project, PsiDirectory directory, String fileName, String source) {
-            PsiJavaFile classFile = (PsiJavaFile) PsiFileFactory.getInstance(project).createFileFromText(fileName, source);
+            PsiJavaFile classFile = (PsiJavaFile) PsiFileFactory.getInstance(project).createFileFromText(fileName, StdFileTypes.JAVA, source);
             classFile = (PsiJavaFile)directory.add(classFile);
             return classFile;
         }
