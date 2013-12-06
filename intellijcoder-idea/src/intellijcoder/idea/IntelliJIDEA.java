@@ -1,11 +1,11 @@
 package intellijcoder.idea;
 
 import com.intellij.execution.*;
+import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitUtil;
-import com.intellij.execution.junit.RuntimeConfigurationProducer;
 import com.intellij.execution.junit.TestClassConfigurationProducer;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.projectView.ProjectView;
@@ -204,7 +204,7 @@ public class IntelliJIDEA implements Ide {
     }
 
     private RunnerAndConfigurationSettings createConfiguration(Project project, Module module, PsiJavaFile testClassFile) {
-        RuntimeConfigurationProducer producer = new TestClassConfigurationProducer();
+        RunConfigurationProducer producer = new TestClassConfigurationProducer();
         ConfigurationFactory configurationFactory = producer.getConfigurationType().getConfigurationFactories()[0];
         RunnerAndConfigurationSettings settings = RunManager.getInstance(project).createRunConfiguration("", configurationFactory);
         final JUnitConfiguration configuration = (JUnitConfiguration)settings.getConfiguration();
