@@ -3,7 +3,7 @@
   <description>An IntelliJ IDEA plugin for participating in TopCoder Algorithm contests.</description>
   <version>1.4</version>
   <vendor email="Konstantin.Fadeyev@gmail.com">Konstantin Fadeyev</vendor>
-  <idea-version since-build="123.72"/>
+  <idea-version since-build="133.193"/>
   <depends>JUnit</depends>
 
   <application-components>

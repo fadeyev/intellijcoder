@@ -1,17 +1,18 @@
 <component name="libraryTable">
   <library name="ContestApplet">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/arena-client-7.0.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/arena-shared-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/basic_type_serialization-1.0.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/client-common-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/client-socket-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/compeng-common-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/concurrent-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/custom-serialization-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/encoder-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/http-tunnel-client-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/log4j-1.2.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/arena-client-7.0.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/arena-shared-7.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/basic_type_serialization-1.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/client-common-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/client-socket-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/compeng-common-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/concurrent-1.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/custom-serialization-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/encoder-1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/http-tunnel-client-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/log4j-1.2.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/topcoder/logging-1.1.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
