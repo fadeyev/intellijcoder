@@ -5,8 +5,10 @@ IntelliJ IDEA plugin for TopCoder
 
 Installation
 -------------------------
-* Automatically: just like any other IntelliJ IDEA plugin: File -> Settings -> Plugins -> Available -> IntelliJCoder -> Download and install.
-* Manually: download the latest jar file: https://code.google.com/p/intellijcoder/downloads/list and place it in the plugins directory: <user.home>/.IntelliJIdeaXX/config/plugins/
+* Automatically: just like any other IntelliJ IDEA plugin:
+`File -> Settings -> Plugins -> Available -> IntelliJCoder -> Download and install.`
+* Manually: download the latest jar file: https://code.google.com/p/intellijcoder/downloads/list and place it in the plugins directory:
+`<user.home>/.IntelliJIdeaXX/config/plugins/`
 
 Usage
 -------------------------
@@ -23,25 +25,27 @@ Screenshot
 How to build (for contributors)
 -------------------------
 * Check out project
+
 ```
 git clone https://github.com/fadeyev/intellijcoder.git
 ```
-* Repository contains .idea project files, so just open the project in IDEA:
-File -> Open
+* Repository contains `.idea` project files, so just open the project in IDEA:
+`File -> Open`
 * Configure the project:
-    * Open project settings: File -> Project Structure (Ctrl+Alt+Shift+S)
+    * Open project settings: `File -> Project Structure (Ctrl+Alt+Shift+S)`
     * Set up IntelliJ IDEA Plugin SDK:
-    Project -> Project SDK -> New... ->IntelliJ Platform Plugin SDK -> <Pick your IDEA directory> -> OK
+    `Project -> Project SDK -> New... ->IntelliJ Platform Plugin SDK -> <Pick your IDEA directory> -> OK`
     * Set this SDK as SDK for modules:
-    Modules -> intellijcoder -> Dependencies -> Module SDK -> <Pick your SDK here>
-    Modules -> intellijcoder-idea -> Dependencies -> Module SDK -> <Pick your SDK here>
+    `Modules -> intellijcoder -> Dependencies -> Module SDK -> <Pick your SDK here>`
+    `Modules -> intellijcoder-idea -> Dependencies -> Module SDK -> <Pick your SDK here>`
     * You also need to set up IDEA Junit plugin library location, since IntelliJCoder depends on it:
-    Libraries -> JUnit IDEA Plugin -> <If idea-junit.jar location is incorrect, please set up correct one>
+    `Libraries -> JUnit IDEA Plugin -> <If idea-junit.jar location is incorrect, please set up correct one>`
     * Check that there are no errors at the bottom of the dialog. Press OK to close Project Settings.
 * To be able to debug the plugin you may want to check out fresh IntelliJ IDEA sources: http://www.jetbrains.org/pages/viewpage.action?pageId=983225
+
 ```
 git clone https://github.com/JetBrains/intellij-community.git
 ```
 and then attach them to IntelliJ IDEA Plugin SDK:
-File -> Project Structure -> SDKs -> IDEA IC-*** -> Sourcepath -> Add -> <Point to the checked out folder>
-* To build a jar file, right-click on intellijcoder-idea module, select the option "Prepare Plugin Module intellijcoder-idea for Deployment"
+`File -> Project Structure -> SDKs -> IDEA IC-*** -> Sourcepath -> Add -> <Point to the checked out folder>`
+* To build a jar file, right-click on **intellijcoder-idea** module, select the option "Prepare Plugin Module intellijcoder-idea for Deployment"

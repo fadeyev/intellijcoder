@@ -1,4 +1,4 @@
-<idea-plugin version="2" url="http://code.google.com/p/intellijcoder">
+<idea-plugin version="2" url="https://github.com/fadeyev/intellijcoder">
   <name>IntelliJCoder</name>
   <description>An IntelliJ IDEA plugin for participating in TopCoder Algorithm contests.</description>
   <version>1.5</version>
