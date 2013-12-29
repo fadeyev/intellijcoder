@@ -7,15 +7,13 @@ import com.intellij.util.PathUtil;
 import intellijcoder.arena.*;
 import intellijcoder.ipc.IntelliJCoderServer;
 import intellijcoder.main.IntelliJCoderApplication;
-import intellijcoder.workspace.IdeWorkspaceManager;
-import intellijcoder.workspace.SolutionCodeBuilder;
-import intellijcoder.workspace.TestCodeBuilder;
-import intellijcoder.arena.ArenaProcessLauncher;
-import intellijcoder.arena.ArenaJarDownloader;
 import intellijcoder.os.DebugProcessLauncher;
 import intellijcoder.os.FileSystem;
 import intellijcoder.os.Network;
 import intellijcoder.os.ProcessLauncher;
+import intellijcoder.workspace.IdeWorkspaceManager;
+import intellijcoder.workspace.SolutionCodeBuilder;
+import intellijcoder.workspace.TestCodeBuilder;
 
 /**
  * @author Konstantin Fadeyev
@@ -87,7 +85,7 @@ public class Injector {
     }
 
     private static SolutionCodeBuilder injectSolutionCodeBuilder() {
-        return new SolutionCodeBuilder();
+        return new SolutionCodeBuilder(ConfigurationService.getInstance().getState());
     }
 
     private static IntelliJIDEA injectIDE(Project project) {

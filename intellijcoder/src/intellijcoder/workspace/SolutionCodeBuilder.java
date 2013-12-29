@@ -1,6 +1,7 @@
 package intellijcoder.workspace;
 
 import intellijcoder.model.Problem;
+import intellijcoder.model.SolutionCfg;
 
 /**
 * @author Konstantin Fadeyev
@@ -8,11 +9,19 @@ import intellijcoder.model.Problem;
 */
 public class SolutionCodeBuilder extends CodeBuilder {
 
+    private SolutionCfg cfg;
+
+    public SolutionCodeBuilder(SolutionCfg cfg) {
+        this.cfg = cfg;
+    }
+
     @Override
     protected void doBuild(Problem problem) {
-        addRow("import java.util.*;");
+        addRow(cfg.imports);
         addRow("");
         startBlock("public class " + problem.getClassName());
+            for (String s : cfg.helperCode.split("\n"))
+                addRow(s);
             startBlock("public " + problem.getReturnType() + " " + problem.getMethodName() + "("+ getParamList(problem) + ")");
                 addRow("return " + getReturnValue(problem.getReturnType()) + ";");
             endBlock();
