@@ -41,7 +41,7 @@ public class ArenaProcessLauncherTest {
             oneOf(processLauncher).launch(
                     with(TestUtil.hasItemsInArray(
                             containsString("java"),
-                            equal("-cp"), equal("contestApplet1.jar;contestApplet2.jar"),
+                            equal("-cp"), equal("contestApplet1.jar" + System.getProperty("path.separator") + "contestApplet2.jar"),
                             equal("com.topcoder.client.contestApplet"),
                             equal("-Dintellijcoder.port=9999"),
                             equal("5001"))));
