@@ -6,9 +6,11 @@ IntelliJ IDEA plugin for TopCoder
 Installation
 -------------------------
 * Automatically: just like any other IntelliJ IDEA plugin:
-`File -> Settings -> Plugins -> Available -> IntelliJCoder -> Download and install.`
+    * Windows: `File -> Settings -> Plugins -> Browse repositories... -> IntelliJCoder -> Download and install`.
+    * Mac OS: `IntelliJ IDEA -> Preferences -> Plugins -> Browse repositories... -> IntelliJCoder -> Download and install`.
 * Manually: download the latest jar file: https://code.google.com/p/intellijcoder/downloads/list and place it in the plugins directory:
-`<user.home>/.IntelliJIdeaXX/config/plugins/`
+    * Windows: `<user.home>/.IdeaXXXX/config/plugins/`.
+    * Mac OS: `<user.home>/Library/Application Support/IdeaXXXX/`.
 
 Usage
 -------------------------
@@ -18,7 +20,9 @@ Usage
 * Login to Arena, then select a contest and open a problem.
 * IntelliJCoder will automatically create a new module with a solution stub and a test class and run tests.
 * After you finished editing your code, use Compile and Sumbit buttons in Arena to submit your code to TopCoder servers.
-* Thanks to the contributors you can now setup your favorite imports and method templates in `File -> Settings -> IntelliJCoder`.
+* Thanks to the contributors you can now setup your favorite imports and method templates in Settings:
+    * Windows: `File -> Settings -> IntelliJCoder`.
+    * Mac OS: `IntelliJ IDEA -> Preferences -> IntelliJCoder`.
 
 Screenshot
 -------------------------
