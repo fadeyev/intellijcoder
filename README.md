@@ -17,6 +17,7 @@ Usage
 * Login to Arena, then select a contest and open a problem.
 * IntelliJCoder will automatically create a new module with a solution stub and a test class and run tests.
 * After you finished editing your code, use Compile and Sumbit buttons in Arena to submit your code to TopCoder servers.
+* Thanks to the contributors you can now setup your favorite imports and method templates in `File -> Settings -> IntelliJCoder`.
 
 Screenshot
 -------------------------
