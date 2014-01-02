@@ -3,6 +3,7 @@ package intellijcoder.workspace;
 import intellijcoder.main.IntelliJCoderException;
 import intellijcoder.model.Problem;
 import intellijcoder.model.ProblemMaker;
+import intellijcoder.model.SolutionCfg;
 import intellijcoder.workspace.CodeBuilder;
 import intellijcoder.workspace.SolutionCodeBuilder;
 import org.junit.Test;
@@ -18,7 +19,7 @@ import static org.junit.Assert.assertThat;
  *         21.01.11
  */
 public class SolutionCodeBuilderTest {
-    private CodeBuilder codeBuilder = new SolutionCodeBuilder();
+    private CodeBuilder codeBuilder = new SolutionCodeBuilder(new SolutionCfg());
 
     @Test
     public void testBasicClassTemplateStructure() throws Exception {

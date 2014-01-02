@@ -7,6 +7,9 @@
   <depends>JUnit</depends>
 
   <application-components>
+      <component>
+          <implementation-class>intellijcoder.idea.ConfigurationService</implementation-class>
+      </component>
   </application-components>
 
   <project-components>
@@ -20,6 +23,7 @@
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
+      <applicationConfigurable  instance="intellijcoder.idea.ConfigurationForm" />
   </extensions>
 
 </idea-plugin>
