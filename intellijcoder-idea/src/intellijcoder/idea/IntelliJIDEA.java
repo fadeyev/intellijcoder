@@ -279,7 +279,7 @@ public class IntelliJIDEA implements Ide {
             contentEntry.addSourceFolder(sourceRoot.getVirtualFile(), false);
             contentEntry.addSourceFolder(testRoot.getVirtualFile(), true);
             setSdk(moduleRootModel);
-            addJUnitLibraryDependency(moduleRootModel);
+            addTestLibraries(moduleRootModel);
             moduleRootModel.commit();
         }
 
@@ -294,9 +294,17 @@ public class IntelliJIDEA implements Ide {
             return moduleRoot.getVirtualFile().getPath() + File.separator + moduleName + ".iml";
         }
 
-        private void addJUnitLibraryDependency(ModifiableRootModel moduleRootModel) {
-            String libPath = PathUtil.getJarPathForClass(org.junit.Test.class);
+        private void addTestLibraries(ModifiableRootModel moduleRootModel) {
+            String junitLibraryPath = PathUtil.getJarPathForClass(org.junit.Test.class);
+            addLibraryDependency(moduleRootModel, junitLibraryPath);
 
+            String hamcrestLibraryPath = PathUtil.getJarPathForClass(org.hamcrest.Matcher.class);
+            if (!junitLibraryPath.equals(hamcrestLibraryPath)) {
+                addLibraryDependency(moduleRootModel, hamcrestLibraryPath);
+            }
+        }
+
+        private void addLibraryDependency(ModifiableRootModel moduleRootModel, String libPath) {
             String url = VfsUtil.getUrlForLibraryRoot(new File(libPath));
             VirtualFile libVirtFile = VirtualFileManager.getInstance().findFileByUrl(url);
 
