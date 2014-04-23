@@ -1,6 +1,7 @@
 package intellijcoder.workspace;
 
 import intellijcoder.model.Problem;
+import intellijcoder.model.SolutionCfg;
 import intellijcoder.model.TestCase;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertThat;
  *         21.01.11
  */
 public class TestCodeBuilderTest {
-    private TestCodeBuilder testCodeBuilder = new TestCodeBuilder();
+    private TestCodeBuilder testCodeBuilder = new TestCodeBuilder(new SolutionCfg());
 
     @Test
     public void basicTestClassTemplateStructure() throws Exception {
