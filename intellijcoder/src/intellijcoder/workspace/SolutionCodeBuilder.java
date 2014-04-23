@@ -9,10 +9,8 @@ import intellijcoder.model.SolutionCfg;
 */
 public class SolutionCodeBuilder extends CodeBuilder {
 
-    private SolutionCfg cfg;
-
     public SolutionCodeBuilder(SolutionCfg cfg) {
-        this.cfg = cfg;
+        super(cfg);
     }
 
     @Override

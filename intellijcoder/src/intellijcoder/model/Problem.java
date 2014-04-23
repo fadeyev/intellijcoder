@@ -8,20 +8,36 @@ import java.util.Arrays;
  *         13.01.11
  */
 public class Problem implements Serializable {
+    private String contestName;
     private String className;
     private String returnType;
     private String methodName;
     private String[] paramTypes;
     private String[] paramNames;
     private TestCase[] testCases;
+    private String htmlDescription;
+    private int timeLimit;  // in milliseconds
+    private int memLimit;   // in megabytes
 
-    public Problem(String className, String returnType, String methodName, String[] paramTypes, String[] paramNames, TestCase[] testCases) {
+    public Problem(String contestName, String className, String returnType, String methodName, String[] paramTypes, String[] paramNames, TestCase[] testCases, String htmlDescription, int timeLimit, int memLimit) {
+        this.contestName = contestName;
         this.className = className;
         this.returnType = returnType;
         this.methodName = methodName;
         this.paramTypes = paramTypes;
         this.paramNames = paramNames;
         this.testCases = testCases;
+        this.htmlDescription = htmlDescription;
+        this.timeLimit = timeLimit;
+        this.memLimit = memLimit;
+    }
+
+    public String getContestName() {
+        return contestName;
+    }
+
+    public String getHtmlDescription() {
+        return htmlDescription;
     }
 
     public String getClassName() {
@@ -47,6 +63,13 @@ public class Problem implements Serializable {
         return testCases;
     }
 
+    public int getTimeLimit() {
+        return timeLimit;
+    }
+
+    public int getMemLimit() {
+        return memLimit;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -55,6 +78,7 @@ public class Problem implements Serializable {
 
         Problem that = (Problem) o;
 
+        if (contestName != null ? !contestName.equals(that.contestName) : that.contestName != null) return false;
         if (className != null ? !className.equals(that.className) : that.className != null) return false;
         if (methodName != null ? !methodName.equals(that.methodName) : that.methodName != null) return false;
         if (!Arrays.equals(paramNames, that.paramNames)) return false;
@@ -68,7 +92,8 @@ public class Problem implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = className != null ? className.hashCode() : 0;
+        int result = contestName != null ? contestName.hashCode() : 0;
+        result = 31 * result + (className != null ? className.hashCode() : 0);
         result = 31 * result + (returnType != null ? returnType.hashCode() : 0);
         result = 31 * result + (methodName != null ? methodName.hashCode() : 0);
         result = 31 * result + (paramTypes != null ? Arrays.hashCode(paramTypes) : 0);
@@ -80,12 +105,15 @@ public class Problem implements Serializable {
     @Override
     public String toString() {
         return "Problem{" +
-                "className='" + className + '\'' +
+                "contestName='" + contestName + '\'' +
+                ", className='" + className + '\'' +
                 ", returnType='" + returnType + '\'' +
                 ", methodName='" + methodName + '\'' +
                 ", paramTypes=" + (paramTypes == null ? null : Arrays.asList(paramTypes)) +
                 ", paramNames=" + (paramNames == null ? null : Arrays.asList(paramNames)) +
                 ", testCases=" + (testCases == null ? null : Arrays.asList(testCases)) +
+                ", timeLimit=" + timeLimit +
+                ", memLimit=" + memLimit +
                 '}';
     }
 }
