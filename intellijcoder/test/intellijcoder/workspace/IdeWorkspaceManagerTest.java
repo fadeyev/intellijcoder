@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import static com.natpryce.makeiteasy.MakeItEasy.*;
 import static intellijcoder.model.ProblemMaker.Problem;
 import static intellijcoder.model.ProblemMaker.className;
+import static intellijcoder.model.ProblemMaker.contestName;
 
 /**
  * @author Konstantin Fadeyev
@@ -31,10 +32,10 @@ public class IdeWorkspaceManagerTest {
     IdeWorkspaceManager workspaceManager = new IdeWorkspaceManager(ide, solutionBuilder, testBuilder);
 
     @Test
-    public void projectModuleNamedAfterProblemClassName() throws Exception {
-        final Problem problem = make(a(Problem, with(className, "Lottery")));
+    public void projectModuleNamedAfterContestName() throws Exception {
+        final Problem problem = make(a(Problem, with(className, "Lottery"), with(contestName, "SRM 144 DIV 1")));
         context.checking(new Expectations(){{
-            oneOf(ide).createModule(with(equal("Lottery")), with(any(String.class)), with(any(String.class)));
+            oneOf(ide).createModule(with(equal("SRM 144 DIV 1")), with(equal("Lottery")), with(any(String.class)), with(any(String.class)), with(any(String.class)), 256);
             ignoring(solutionBuilder);
             ignoring(testBuilder);
         }});
@@ -47,7 +48,7 @@ public class IdeWorkspaceManagerTest {
         final Problem problem = make(a(Problem));
         context.checking(new Expectations(){{
             atLeast(1).of(ide).getClassSource("Lottery");
-            ignoring(ide).createModule(with(any(String.class)), with(any(String.class)), with(any(String.class)));
+            ignoring(ide).createModule(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(String.class)), 256);
             ignoring(solutionBuilder);
             ignoring(testBuilder);
         }});
@@ -60,7 +61,7 @@ public class IdeWorkspaceManagerTest {
         final Problem problem = make(a(Problem));
         context.checking(new Expectations(){{
             allowing(solutionBuilder).build(problem); will(returnValue("class template"));
-            oneOf(ide).createModule(with(any(String.class)), with(equal("class template")), with(any(String.class)));
+            oneOf(ide).createModule(with(any(String.class)), with(any(String.class)), with(equal("class template")), with(any(String.class)), with(any(String.class)), 256);
             ignoring(testBuilder);
         }});
         workspaceManager.createProblemWorkspace(problem);
@@ -71,7 +72,7 @@ public class IdeWorkspaceManagerTest {
         final Problem problem = make(a(Problem));
         context.checking(new Expectations(){{
             allowing(testBuilder).build(problem); will(returnValue("test class template"));
-            oneOf(ide).createModule(with(any(String.class)), with(any(String.class)), with(equal("test class template")));
+            oneOf(ide).createModule(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(equal("test class template")), with(any(String.class)), 256);
             ignoring(solutionBuilder);
         }});
         workspaceManager.createProblemWorkspace(problem);
