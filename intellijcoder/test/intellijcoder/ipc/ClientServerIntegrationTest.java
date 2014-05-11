@@ -134,6 +134,7 @@ public class ClientServerIntegrationTest {
 
         final ProblemComponentModel inputComponentModel = context.mock(ProblemComponentModel.class);
         context.checking(new Expectations(){{
+            allowing(inputComponentModel).getProblem().getRound().getContestName(); will(returnValue("SRM 144 DIV 1"));
             allowing(inputComponentModel).getClassName(); will(returnValue("BinaryCode"));
             allowing(inputComponentModel).getReturnType();   will(returnValue(new DataType("int")));
             allowing(inputComponentModel).getMethodName();   will(returnValue("multiply"));
@@ -143,6 +144,7 @@ public class ClientServerIntegrationTest {
         }});
         TestCase testCase = make(a(TestCase, with(input, new String[0]), with(output, "1")));
         Problem expectedProblem = make(a(Problem,
+                with(contestName, "SRM 144 DIV 1"),
                 with(className, "BinaryCode"),
                 with(returnType, "int"),
                 with(methodName, "multiply"),
