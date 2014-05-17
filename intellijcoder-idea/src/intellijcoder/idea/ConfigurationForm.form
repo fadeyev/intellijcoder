@@ -23,7 +23,9 @@
               <tabbedpane title="Settings"/>
             </constraints>
             <properties>
-              <background color="-1118482"/>
+              <background system-color="window"/>
+              <enabled value="true"/>
+              <foreground system-color="text"/>
             </properties>
             <border type="none"/>
             <children>
@@ -124,16 +126,17 @@
                   </component>
                 </children>
               </grid>
-              <component id="4b3c2" class="javax.swing.JTextPane" binding="NOTETheFollowingSettingsTextPane" default-binding="true">
+              <component id="4b3c2" class="javax.swing.JTextPane" binding="Note">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="1" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="20"/>
                   </grid>
                 </constraints>
                 <properties>
-                  <background color="-1118482"/>
+                  <background system-color="window"/>
                   <editable value="false"/>
-                  <enabled value="false"/>
+                  <enabled value="true"/>
+                  <foreground system-color="infoText"/>
                   <text value="NOTE:  The following settings are used when generating files.  Changes to these settings will not affect existing files."/>
                 </properties>
               </component>

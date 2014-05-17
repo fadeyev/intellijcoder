@@ -18,8 +18,8 @@ public class ConfigurationForm implements Configurable {
     private JTextField taResourceFolder;
     private JComboBox taModuleNamingConvention;
     private JCheckBox taUseTimeLimit;
+    private JTextPane Note;
     private JCheckBox taUseMemoryLimit;
-    private JTextPane NOTETheFollowingSettingsTextPane;
     private SolutionCfg initialCfg;
 
     @Nls
