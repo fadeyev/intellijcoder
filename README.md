@@ -28,6 +28,11 @@ Screenshot
 -------------------------
 ![TopCoder icon](http://intellijcoder.googlecode.com/files/screenshot.png)
 
+Support
+-------------------------
+New features are developed by contributors now (thanks a lot to all of them). I don't actively develop this project - only critical bug fixes.
+However, contributions are always welcome. I'll do my best to merge your changes and deploy a new version to JetBrains website.
+
 How to build (for contributors)
 -------------------------
 * Check out project
