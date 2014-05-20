@@ -5,12 +5,9 @@ IntelliJ IDEA plugin for TopCoder
 
 Installation
 -------------------------
-* Automatically: just like any other IntelliJ IDEA plugin:
-    * Windows: `File -> Settings -> Plugins -> Browse repositories... -> IntelliJCoder -> Download and install`
-    * Mac OS: `IntelliJ IDEA -> Preferences -> Plugins -> Browse repositories... -> IntelliJCoder -> Download and install`
-* Manually: download the latest jar file: https://code.google.com/p/intellijcoder/downloads/list and place it in the plugins directory:
-    * Windows: `<user.home>/.IdeaXXXX/config/plugins/`
-    * Mac OS: `<user.home>/Library/Application Support/IdeaXXXX/`
+Just like any other IntelliJ IDEA plugin:
+* Windows: `File -> Settings -> Plugins -> Browse repositories... -> IntelliJCoder -> Download and install`
+* Mac OS: `IntelliJ IDEA -> Preferences -> Plugins -> Browse repositories... -> IntelliJCoder -> Download and install`
 
 Usage
 -------------------------
