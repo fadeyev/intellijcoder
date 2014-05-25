@@ -20,6 +20,9 @@ public class ProblemMaker {
     public static final Property<Problem,String[]> paramTypes = newProperty();
     public static final Property<Problem,String[]> paramNames = newProperty();
     public static final Property<Problem,TestCase[]> testCases = newProperty();
+    public static final Property<Problem,String> htmlDescription = newProperty();
+    public static final Property<Problem,Integer> memLimit = newProperty();
+    public static final Property<Problem,Integer> timeLimit = newProperty();
 
     public static final Property<TestCase,String[]> input = newProperty();
     public static final Property<TestCase,String> output = newProperty();
@@ -35,9 +38,10 @@ public class ProblemMaker {
                     lookup.valueOf(paramTypes, new String[0]),
                     lookup.valueOf(paramNames, new String[0]),
                     lookup.valueOf(testCases, new TestCase[0]),
-                    "N/A",
-                    2000,
-                    256);
+                    lookup.valueOf(htmlDescription, ""),
+                    lookup.valueOf(timeLimit, 2000),
+                    lookup.valueOf(memLimit, 256)
+            );
         }
     };
 

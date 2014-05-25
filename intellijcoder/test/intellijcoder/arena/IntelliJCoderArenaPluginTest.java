@@ -53,8 +53,10 @@ public class IntelliJCoderArenaPluginTest {
     @Test
     public void extractsMethodSignatureFromProblemModel() throws IntelliJCoderException {
         ProblemComponentModel problemComponentModel = make(a(ProblemComponentModel,
-                with(returnType, dataType("int[]")), with(methodName, "decode"),
-                with(paramTypes, new DataType[]{dataType("String[]")}), with(paramNames, new String[]{"a"})));
+                with(returnType, dataType("int[]")),
+                with(methodName, "decode"),
+                with(paramTypes, new DataType[]{dataType("String[]")}),
+                with(paramNames, new String[]{"a"})));
         context.checking(new Expectations(){{
             oneOf(workspaceManager).createProblemWorkspace(with(hasMethodSignature("int[]", "decode", "String[]", "a")));
             ignoring(messagePanel);

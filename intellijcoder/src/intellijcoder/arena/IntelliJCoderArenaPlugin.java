@@ -120,7 +120,7 @@ public class IntelliJCoderArenaPlugin implements ArenaPlugin {
 
     private Problem extractProblem(ProblemComponentModel componentModel, Language language, Renderer renderer) throws Exception {
         String contestName = componentModel.getProblem().getRound().getContestName();
-        String htmlDescription = renderer.toHTML(language);
+        String htmlDescription = (renderer != null) ? renderer.toHTML(language) : "";
         String className = componentModel.getClassName();
         String returnType = componentModel.getReturnType().getDescriptor(JavaLanguage.JAVA_LANGUAGE);
         String methodName = componentModel.getMethodName();
