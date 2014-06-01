@@ -12,6 +12,14 @@ public class ConfigurationForm implements Configurable {
     private JTextArea taImports;
     private JTextArea taHelperCode;
     private JPanel mainPanel;
+    private JTabbedPane tabbedPane1;
+    private JTextField taSourceFolder;
+    private JTextField taTestFolder;
+    private JTextField taResourceFolder;
+    private JComboBox taModuleNamingConvention;
+    private JCheckBox taUseTimeLimit;
+    private JTextPane Note;
+    private JCheckBox taUseMemoryLimit;
     private SolutionCfg initialCfg;
 
     @Nls
@@ -20,10 +28,22 @@ public class ConfigurationForm implements Configurable {
     }
 
     private SolutionCfg getConfig() {
-        return new SolutionCfg(taImports.getText(), taHelperCode.getText());
+        return new SolutionCfg(
+                SolutionCfg.ModuleNamingConvention.values()[taModuleNamingConvention.getSelectedIndex()],
+                taSourceFolder.getText(),
+                taTestFolder.getText(),
+                taResourceFolder.getText(),
+                taUseTimeLimit.isSelected(),
+                taImports.getText(),
+                taHelperCode.getText());
     }
 
     void setConfig(SolutionCfg cfg) {
+        taModuleNamingConvention.setSelectedIndex(cfg.moduleNamingConvention.ordinal());
+        taSourceFolder.setText(cfg.sourceFolderName);
+        taTestFolder.setText(cfg.testFolderName);
+        taResourceFolder.setText(cfg.resourceFolderName);
+        taUseTimeLimit.setSelected(cfg.useTimeLimit);
         taImports.setText(cfg.imports);
         taHelperCode.setText(cfg.helperCode);
     }

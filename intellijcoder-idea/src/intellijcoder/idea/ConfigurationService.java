@@ -23,6 +23,11 @@ public class ConfigurationService implements PersistentStateComponent<SolutionCf
     }
 
     public void loadState(SolutionCfg state) {
+        this.state.moduleNamingConvention = state.moduleNamingConvention;
+        this.state.sourceFolderName = state. sourceFolderName;
+        this.state.testFolderName = state.testFolderName;
+        this.state.resourceFolderName = state.resourceFolderName;
+        this.state.useTimeLimit = state.useTimeLimit;
         this.state.imports = state.imports;
         this.state.helperCode = state.helperCode;
     }

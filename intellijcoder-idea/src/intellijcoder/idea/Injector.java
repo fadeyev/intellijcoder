@@ -7,6 +7,7 @@ import com.intellij.util.PathUtil;
 import intellijcoder.arena.*;
 import intellijcoder.ipc.IntelliJCoderServer;
 import intellijcoder.main.IntelliJCoderApplication;
+import intellijcoder.model.SolutionCfg;
 import intellijcoder.os.DebugProcessLauncher;
 import intellijcoder.os.FileSystem;
 import intellijcoder.os.Network;
@@ -29,7 +30,8 @@ public class Injector {
                 injectArenaAppletProvider(),
                 injectArenaProcessLauncher(),
                 injectIntelliJCoderServer(project),
-                injectArenaConfigManager());
+                injectArenaConfigManager()
+            );
             injectIntelliJIDEAApplication().addApplicationListener(injectIntelliJCoderFinalizer(intelliJCoderInstance));
         }
         return intelliJCoderInstance;
@@ -81,7 +83,7 @@ public class Injector {
     }
 
     private static TestCodeBuilder injectTestCodeBuilder() {
-        return new TestCodeBuilder();
+        return new TestCodeBuilder(ConfigurationService.getInstance().getState());
     }
 
     private static SolutionCodeBuilder injectSolutionCodeBuilder() {

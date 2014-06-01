@@ -1,17 +1,20 @@
 package intellijcoder.workspace;
 
 import intellijcoder.model.Problem;
+import intellijcoder.model.SolutionCfg;
 
 /**
  * @author Konstantin Fadeyev
  *         21.01.11
  */
 public abstract class CodeBuilder {
+    protected SolutionCfg cfg;
     private StringBuilder builder;
     private int level;
 
-    public CodeBuilder() {
+    public CodeBuilder(SolutionCfg cfg) {
         builder = new StringBuilder();
+        this.cfg = cfg;
     }
 
     protected void endBlock() {
