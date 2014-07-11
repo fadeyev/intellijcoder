@@ -367,10 +367,7 @@ public class IntelliJIDEA implements Ide {
         }
 
         private void setSdk(ModifiableRootModel moduleRootModel) {
-            Sdk[] sdks = ProjectJdkTable.getInstance().getAllJdks();
-            if(sdks.length > 0) {
-                moduleRootModel.setSdk(sdks[0]);
-            }
+            moduleRootModel.inheritSdk();
         }
 
         private String getModuleFilePath(PsiDirectory moduleRoot) {
