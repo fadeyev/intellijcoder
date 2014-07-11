@@ -13,12 +13,16 @@ import static com.natpryce.makeiteasy.Property.newProperty;
  *         14.01.11
  */
 public class ProblemMaker {
+    public static final Property<Problem,String> contestName = newProperty();
     public static final Property<Problem,String> className = newProperty();
     public static final Property<Problem,String> returnType = newProperty();
     public static final Property<Problem,String> methodName = newProperty();
     public static final Property<Problem,String[]> paramTypes = newProperty();
     public static final Property<Problem,String[]> paramNames = newProperty();
     public static final Property<Problem,TestCase[]> testCases = newProperty();
+    public static final Property<Problem,String> htmlDescription = newProperty();
+    public static final Property<Problem,Integer> memLimit = newProperty();
+    public static final Property<Problem,Integer> timeLimit = newProperty();
 
     public static final Property<TestCase,String[]> input = newProperty();
     public static final Property<TestCase,String> output = newProperty();
@@ -27,12 +31,17 @@ public class ProblemMaker {
     public static final Instantiator<Problem> Problem = new Instantiator<Problem>() {
         public Problem instantiate(PropertyLookup<Problem> lookup) {
             return new Problem(
+                    lookup.valueOf(contestName, "SRM 144 DIV 1"),
                     lookup.valueOf(className, "BinaryCode"),
                     lookup.valueOf(returnType, "String[]"),
                     lookup.valueOf(methodName, "decode"),
                     lookup.valueOf(paramTypes, new String[0]),
                     lookup.valueOf(paramNames, new String[0]),
-                    lookup.valueOf(testCases, new TestCase[0]));
+                    lookup.valueOf(testCases, new TestCase[0]),
+                    lookup.valueOf(htmlDescription, ""),
+                    lookup.valueOf(timeLimit, 2000),
+                    lookup.valueOf(memLimit, 256)
+            );
         }
     };
 

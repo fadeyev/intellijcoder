@@ -22,7 +22,7 @@ public class IdeWorkspaceManager implements WorkspaceManager {
     }
 
     public void createProblemWorkspace(Problem problem) throws IntelliJCoderException {
-        ide.createModule(problem.getClassName(), solutionBuilder.build(problem), testBuilder.build(problem));
+        ide.createModule(problem.getContestName(), problem.getClassName(), solutionBuilder.build(problem), testBuilder.build(problem), problem.getHtmlDescription(), problem.getMemLimit());
     }
 
     public String getSolutionSource(String className) throws IntelliJCoderException {

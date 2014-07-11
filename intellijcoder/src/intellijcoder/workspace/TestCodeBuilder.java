@@ -1,12 +1,18 @@
 package intellijcoder.workspace;
 
 import intellijcoder.model.Problem;
+import intellijcoder.model.SolutionCfg;
 
 /**
 * @author Konstantin Fadeyev
 *         21.01.11
 */
 public class TestCodeBuilder extends CodeBuilder {
+
+    public TestCodeBuilder(SolutionCfg cfg) {
+        super(cfg);
+    }
+
     @Override
     protected void doBuild(Problem problem) {
         addRow("import org.junit.Test;");
@@ -22,7 +28,12 @@ public class TestCodeBuilder extends CodeBuilder {
 
     private void addTestCase(Problem problem, int testIndex) {
         addRow("");
-        addRow("@Test");
+        if (cfg.useTimeLimit) {
+            addRow("@Test(timeout=" + problem.getTimeLimit() + ")");
+        }
+        else {
+            addRow("@Test");
+        }
         startBlock("public void test"+testIndex+"()");
             addInputVariables(problem, testIndex);
         String assertStatement = getAssertStatement(problem, testIndex);

@@ -89,11 +89,11 @@ public class IntelliJCoderArenaPlugin implements ArenaPlugin {
             return;
         }
         try {
-            Problem problem = extractProblem(componentModel);
+            Problem problem = extractProblem(componentModel, language, renderer);
             workspaceManager.createProblemWorkspace(problem);
             setCurrentProblem(problem);
             messagePanel.showInfoMessage(WORKSPACE_CREATED_MESSAGE);
-        } catch (IntelliJCoderException e) {
+        } catch (Exception e) {
             messagePanel.showErrorMessage(e.getMessage());
         }
     }
@@ -118,14 +118,21 @@ public class IntelliJCoderArenaPlugin implements ArenaPlugin {
         currentProblem = problem;
     }
 
-    private Problem extractProblem(ProblemComponentModel componentModel) {
+    private Problem extractProblem(ProblemComponentModel componentModel, Language language, Renderer renderer) throws Exception {
+        String contestName = componentModel.getProblem().getRound().getContestName();
+        String htmlDescription = (renderer != null) ? renderer.toHTML(language) : "";
         String className = componentModel.getClassName();
         String returnType = componentModel.getReturnType().getDescriptor(JavaLanguage.JAVA_LANGUAGE);
         String methodName = componentModel.getMethodName();
         String[] paramTypes = extractTypes(componentModel.getParamTypes());
         String[] paramNames = componentModel.getParamNames();
+        int timeLimit = componentModel.getComponent().getExecutionTimeLimit();
+        // ugly hack - old SRM problems return 840000 instead of 2000
+        // for reference, see http://apps.topcoder.com/forums/?module=Thread&threadID=806641&start=30&mc=51
+        if (timeLimit == 840000) timeLimit = 2000;
+        int memLimit = componentModel.getComponent().getMemLimitMB();
         TestCase[] testCases = extractTestCases(componentModel.getTestCases());
-        return new Problem(className, returnType, methodName, paramTypes, paramNames, testCases);
+        return new Problem(contestName, className, returnType, methodName, paramTypes, paramNames, testCases, htmlDescription, timeLimit, memLimit);
     }
 
     private TestCase[] extractTestCases(com.topcoder.shared.problem.TestCase[] testCases) {
