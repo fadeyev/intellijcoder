@@ -103,7 +103,6 @@ public class IntelliJIDEA implements Ide {
     }
 
     private String getClassSource(Project project, String className) throws IntelliJCoderException {
-        SolutionCfg config = ConfigurationService.getInstance().getState();
         String fileName = classFileName(className);
         VirtualFile source = null;
         // find the desired class name across any modules in the project
@@ -138,8 +137,7 @@ public class IntelliJIDEA implements Ide {
 
     private void createModule(final Project project, String moduleName, String className, String classSource, String testSource, String htmlSource, int memLimit) throws IntelliJCoderException {
         SolutionCfg config = ConfigurationService.getInstance().getState();
-        String finalModuleName = "";
-        ModuleCreator moduleCreator = null;
+        ModuleCreator moduleCreator;
         switch (config.moduleNamingConvention) {
             case BY_CLASS_NAME: // this option creates a module per problem
                 moduleCreator = new ModuleCreator(config, project, className, className, classSource, testSource, htmlSource, memLimit);
@@ -152,44 +150,6 @@ public class IntelliJIDEA implements Ide {
         }
 
         moduleCreator.create();
-    }
-
-    /**
-     * WARNING!!! This method uses some proprietary IDEA classes,
-     * hence vulnerable to IDEA version changes
-     * @param project current project
-     * @param classFile file to select
-     */
-    private void selectFileInProjectView(Project project, PsiFile classFile) {
-        ProjectView.getInstance(project).selectPsiElement(classFile, false);
-    }
-
-    private void checkIfModuleRootDirectoryAlreadyExists(Project project, String moduleName) throws IntelliJCoderException {
-        @SuppressWarnings({"ConstantConditions"})
-        PsiDirectory projectRoot = PsiManager.getInstance(project).findDirectory(project.getBaseDir());
-        if(hasSubdirectory(projectRoot, moduleName)) {
-            throw new IntelliJCoderException("Directory '" + moduleName + "' already exists.");
-        }
-    }
-
-    private void checkModuleStructure(Module m, String moduleName) throws IntelliJCoderException {
-        VirtualFile[] sourceRoots = ModuleRootManager.getInstance(m).getSourceRoots();
-        if(sourceRoots.length == 0) {
-            throw new IntelliJCoderException("Module '" + moduleName + "' exists but doesn't have a source root.");
-        }
-        VirtualFile source = sourceRoots[0].findChild(classFileName(moduleName));
-        if(source == null) {
-            throw new IntelliJCoderException("Module '" + moduleName + "' exists but doesn't have '" + moduleName + "' class.");
-        }
-    }
-
-    private static boolean hasSubdirectory(PsiDirectory psiDirectory, String name) {
-        for (PsiDirectory directory : psiDirectory.getSubdirectories()) {
-            if(name.equals(directory.getName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static String classFileName(String className) {
@@ -230,26 +190,6 @@ public class IntelliJIDEA implements Ide {
             this.memLimit = memLimit;
         }
 
-        public PsiFile getClassFile() {
-            return classFile;
-        }
-
-        public PsiFile getTestFile() {
-            return testFile;
-        }
-
-        public PsiFile getHtmlFile() {
-            return htmlFile;
-        }
-
-        public Module getModule() {
-            return module;
-        }
-
-        public int getMemLimit() {
-            return memLimit;
-        }
-
         public PsiDirectory getOrCreateModuleFolder(PsiDirectory projectRoot, String moduleName) {
             PsiDirectory result = projectRoot.findSubdirectory(moduleName);
             if (result == null) {
@@ -261,14 +201,11 @@ public class IntelliJIDEA implements Ide {
         /**
          * A module will be created if it doesn't already exist.
          * Source, test, and resource folders will be created and added to the module if they don't already exist.
-         *
-         * @return The module
          */
         public void create() {
             PsiDirectory projectRoot = PsiManager.getInstance(project).findDirectory(project.getBaseDir());
             assert projectRoot != null;
             final PsiDirectory moduleRoot = getOrCreateModuleFolder(projectRoot, moduleName);
-            boolean newModule = false;
             module = ModuleManager.getInstance(project).findModuleByName(moduleName);
             // if module doesn't exist, it must be created
             if (module == null) {
@@ -279,9 +216,9 @@ public class IntelliJIDEA implements Ide {
                         modifiableRootModel.inheritSdk();
                         addJUnitLibraryDependency(modifiableRootModel);
                         modifiableRootModel.commit();
-                        PsiDirectory sourceRoot = findOrCreateSourceFolder(moduleRoot, config.sourceFolderName, false);
-                        PsiDirectory testRoot = findOrCreateSourceFolder(moduleRoot, config.testFolderName, true);
-                        PsiDirectory resourceRoot = findOrCreateSourceFolder(moduleRoot, config.resourceFolderName, false);
+                        findOrCreateSourceFolder(moduleRoot, config.sourceFolderName, false);
+                        findOrCreateSourceFolder(moduleRoot, config.testFolderName, true);
+                        findOrCreateSourceFolder(moduleRoot, config.resourceFolderName, false);
                     }
                 });
             }
@@ -371,7 +308,9 @@ public class IntelliJIDEA implements Ide {
             libraryModel.commit();
 
             final LibraryOrderEntry orderEntry = moduleRootModel.findLibraryOrderEntry(jarLibrary);
-            orderEntry.setScope(DependencyScope.TEST);
+            if(orderEntry != null) {
+                orderEntry.setScope(DependencyScope.TEST);
+            }
         }
 
     }
