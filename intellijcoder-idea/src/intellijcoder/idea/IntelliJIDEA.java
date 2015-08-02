@@ -8,20 +8,20 @@ import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitUtil;
 import com.intellij.execution.junit.TestClassConfigurationProducer;
 import com.intellij.ide.DataManager;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.StdModuleTypes;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.ProjectJdkTable;
-import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.ui.Messages;
@@ -29,7 +29,6 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.PathUtil;
 import intellijcoder.main.IntelliJCoderException;
 import intellijcoder.model.SolutionCfg;
@@ -52,7 +51,7 @@ public class IntelliJIDEA implements Ide {
 
     public void createModule(final String moduleName, final String className, final String classSource, final String testSource, final String htmlSource, final int memLimit) {
         //We run it in the event thread, so the DataContext would have current Project data;
-        ApplicationManager.getApplication().invokeLater(new Runnable() {
+        DumbService.getInstance(project).smartInvokeLater(new Runnable() {
             public void run() {
                 ApplicationManager.getApplication().runWriteAction(new Runnable() {
                     public void run() {
@@ -79,7 +78,7 @@ public class IntelliJIDEA implements Ide {
                     public void run() {
                         try {
                             result[0] = IntelliJIDEA.this.getClassSource(getCurrentProject(), className);
-                        } catch(IntelliJCoderException e) {
+                        } catch (IntelliJCoderException e) {
                             showErrorMessage(e.getMessage());
                         }
                     }
@@ -152,16 +151,7 @@ public class IntelliJIDEA implements Ide {
                 throw new IntelliJCoderException("Configuration broken.  Module naming convention value is not valid.");
         }
 
-        Module module = moduleCreator.create();
-        PsiJavaFile classFile = moduleCreator.getClassFile();
-        PsiJavaFile testFile = moduleCreator.getTestFile();
-
-        selectFileInProjectView(project, classFile);
-
-        //noinspection ConstantConditions
-        FileEditorManager.getInstance(project).openFile(classFile.getVirtualFile(), true);
-
-        createAndRunConfiguration(config, project, module, testFile, memLimit);
+        moduleCreator.create();
     }
 
     /**
@@ -170,7 +160,7 @@ public class IntelliJIDEA implements Ide {
      * @param project current project
      * @param classFile file to select
      */
-    private void selectFileInProjectView(Project project, PsiJavaFile classFile) {
+    private void selectFileInProjectView(Project project, PsiFile classFile) {
         ProjectView.getInstance(project).selectPsiElement(classFile, false);
     }
 
@@ -202,44 +192,6 @@ public class IntelliJIDEA implements Ide {
         return false;
     }
 
-    /**
-     * WARNING!!! This method uses some proprietary IDEA classes,
-     * hence vulnerable to IDEA version changes
-     * @param project current project
-     * @param module module
-     * @param testFile class file
-     */
-    private void createAndRunConfiguration(SolutionCfg config, Project project, Module module, PsiJavaFile testFile, int memLimit) {
-        RunnerAndConfigurationSettings settings = createConfiguration(config, project, module, testFile, memLimit);
-        setConfigurationAsCurrent(project, settings);
-        executeConfiguration(project, settings);
-    }
-
-    private void executeConfiguration(Project project, RunnerAndConfigurationSettings settings) {
-        Executor executor = ExecutorRegistry.getInstance().getExecutorById(DefaultRunExecutor.EXECUTOR_ID);
-        ProgramRunnerUtil.executeConfiguration(project, settings, executor);
-    }
-
-    private void setConfigurationAsCurrent(Project project, RunnerAndConfigurationSettings settings) {
-        final RunManagerEx runManager = (RunManagerEx) RunManager.getInstance(project);
-        runManager.setTemporaryConfiguration(settings);
-    }
-
-    private RunnerAndConfigurationSettings createConfiguration(SolutionCfg config, Project project, Module module, PsiJavaFile testClassFile, int memLimit) {
-        RunConfigurationProducer producer = new TestClassConfigurationProducer();
-        ConfigurationFactory configurationFactory = producer.getConfigurationType().getConfigurationFactories()[0];
-        RunnerAndConfigurationSettings settings = RunManager.getInstance(project).createRunConfiguration("", configurationFactory);
-        final JUnitConfiguration configuration = (JUnitConfiguration)settings.getConfiguration();
-        configuration.setModule(module);
-        PsiClass testClass = JUnitUtil.getTestClass(testClassFile);
-        configuration.beClassConfiguration(testClass);
-        configuration.restoreOriginalModule(module);
-        String vmParameters = configuration.getVMParameters();
-        if (!vmParameters.isEmpty()) vmParameters += " ";
-        configuration.setVMParameters(vmParameters + "-Xmx" + memLimit + "m");
-        return settings;
-    }
-
     private static String classFileName(String className) {
         return className + ".java";
     }
@@ -259,8 +211,8 @@ public class IntelliJIDEA implements Ide {
         private String classSource;
         private String testSource;
         private String htmlSource;
-        PsiJavaFile classFile;
-        PsiJavaFile testFile;
+        PsiFile classFile;
+        PsiFile testFile;
         PsiFile htmlFile;
         private Module module;
         private SolutionCfg config;
@@ -278,11 +230,11 @@ public class IntelliJIDEA implements Ide {
             this.memLimit = memLimit;
         }
 
-        public PsiJavaFile getClassFile() {
+        public PsiFile getClassFile() {
             return classFile;
         }
 
-        public PsiJavaFile getTestFile() {
+        public PsiFile getTestFile() {
             return testFile;
         }
 
@@ -298,89 +250,113 @@ public class IntelliJIDEA implements Ide {
             return memLimit;
         }
 
+        public PsiDirectory getOrCreateModuleFolder(PsiDirectory projectRoot, String moduleName) {
+            PsiDirectory result = projectRoot.findSubdirectory(moduleName);
+            if (result == null) {
+                result = projectRoot.createSubdirectory(moduleName);
+            }
+            return result;
+        }
+
         /**
          * A module will be created if it doesn't already exist.
          * Source, test, and resource folders will be created and added to the module if they don't already exist.
          *
          * @return The module
          */
-        public Module create() {
+        public void create() {
             PsiDirectory projectRoot = PsiManager.getInstance(project).findDirectory(project.getBaseDir());
             assert projectRoot != null;
+            final PsiDirectory moduleRoot = getOrCreateModuleFolder(projectRoot, moduleName);
+            boolean newModule = false;
             module = ModuleManager.getInstance(project).findModuleByName(moduleName);
+            // if module doesn't exist, it must be created
             if (module == null) {
-                PsiDirectory moduleRoot = projectRoot.createSubdirectory(moduleName);
-                module = ModuleManager.getInstance(project).newModule(getModuleFilePath(moduleRoot), StdModuleTypes.JAVA.getId());
-                ModifiableRootModel moduleRootModel = ModuleRootManager.getInstance(module).getModifiableModel();
-                setSdk(moduleRootModel);
-                addTestLibraries(moduleRootModel);
-                moduleRootModel.commit();
+                DumbService.getInstance(project).runWhenSmart(new Runnable() {
+                    public void run() {
+                        module = ModuleManager.getInstance(project).newModule(getModuleFilePath(moduleRoot), StdModuleTypes.JAVA.getId());
+                        ModifiableRootModel modifiableRootModel = ModuleRootManager.getInstance(module).getModifiableModel();
+                        modifiableRootModel.inheritSdk();
+                        addJUnitLibraryDependency(modifiableRootModel);
+                        modifiableRootModel.commit();
+                        PsiDirectory sourceRoot = findOrCreateSourceFolder(moduleRoot, config.sourceFolderName, false);
+                        PsiDirectory testRoot = findOrCreateSourceFolder(moduleRoot, config.testFolderName, true);
+                        PsiDirectory resourceRoot = findOrCreateSourceFolder(moduleRoot, config.resourceFolderName, false);
+                    }
+                });
             }
-            PsiDirectory moduleRoot = projectRoot.findSubdirectory(moduleName);
-            PsiDirectory sourceRoot = moduleRoot.findSubdirectory(config.sourceFolderName);
-            if (sourceRoot == null) {
-                sourceRoot = createSourceFolder(moduleRoot, config.sourceFolderName, false);
-            }
-            PsiDirectory testRoot = moduleRoot.findSubdirectory(config.testFolderName);
-            if (testRoot == null) {
-                testRoot = createSourceFolder(moduleRoot, config.testFolderName, true);
-            }
-            PsiDirectory resourceRoot = moduleRoot.findSubdirectory(config.resourceFolderName);
-            if (resourceRoot == null) {
-                resourceRoot = createSourceFolder(moduleRoot, config.resourceFolderName, false);
-            }
-            classFile = (PsiJavaFile) sourceRoot.findFile(classFileName(className));
-            if (classFile == null) {
-                classFile = createJavaFile(project, sourceRoot, classFileName(className), classSource);
-            }
-            testFile = (PsiJavaFile) testRoot.findFile(testClassFileName(className));
-            if (testFile == null) {
-                testFile = createJavaFile(project, testRoot, testClassFileName(className), testSource);
-            }
-            htmlFile = (PsiFile) resourceRoot.findFile(htmlFileName(className));
-            if (htmlFile == null) {
-                htmlFile = createHtmlFile(project, resourceRoot, htmlFileName(className), htmlSource);
-            }
-            return module;
+            // if relevant files (html,class,test) don't exist, they must be created
+            DumbService.getInstance(project).runWhenSmart(new Runnable() {
+                public void run() {
+                    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                        public void run() {
+                            htmlFile = findOrCreateFile(project, moduleRoot.findSubdirectory(config.resourceFolderName), htmlFileName(className), StdFileTypes.HTML, htmlSource);
+                            classFile = findOrCreateFile(project, moduleRoot.findSubdirectory(config.sourceFolderName), classFileName(className), JavaFileType.INSTANCE, classSource);
+                            testFile = findOrCreateFile(project, moduleRoot.findSubdirectory(config.testFolderName), testClassFileName(className), JavaFileType.INSTANCE, testSource);
+                        }
+                    });
+                }
+            });
+            // prepare a run configuration for current test, and run it once
+            DumbService.getInstance(project).runWhenSmart(new Runnable() {
+                public void run() {
+                    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                        public void run() {
+                            ProjectView.getInstance(project).selectPsiElement(classFile, false);
+                            FileEditorManager.getInstance(project).openFile(classFile.getVirtualFile(), true);
+                            RunConfigurationProducer producer = new TestClassConfigurationProducer();
+                            ConfigurationFactory configurationFactory = producer.getConfigurationType().getConfigurationFactories()[0];
+                            RunnerAndConfigurationSettings settings = RunManager.getInstance(project).createRunConfiguration("", configurationFactory);
+                            final JUnitConfiguration configuration = (JUnitConfiguration) settings.getConfiguration();
+                            configuration.setModule(module);
+                            PsiClass testClass = JUnitUtil.getTestClass(testFile);
+                            configuration.beClassConfiguration(testClass);
+                            configuration.restoreOriginalModule(module);
+                            String vmParameters = configuration.getVMParameters();
+                            if (!vmParameters.isEmpty()) vmParameters += " ";
+                            configuration.setVMParameters(vmParameters + "-Xmx" + memLimit + "m");
+                            final RunManagerEx runManager = (RunManagerEx) RunManager.getInstance(project);
+                            runManager.setTemporaryConfiguration(settings);
+                            Executor executor = ExecutorRegistry.getInstance().getExecutorById(DefaultRunExecutor.EXECUTOR_ID);
+                            ProgramRunnerUtil.executeConfiguration(project, settings, executor);
+                        }
+                    });
+                }
+            });
         }
 
-        private PsiDirectory createSourceFolder(PsiDirectory moduleRoot, String folderName, boolean test) {
-            PsiDirectory resourceRoot;ModifiableRootModel moduleRootModel = ModuleRootManager.getInstance(module).getModifiableModel();
-            ContentEntry contentEntry = moduleRootModel.addContentEntry(moduleRoot.getVirtualFile());
-            // add resource folder
-            resourceRoot = moduleRoot.createSubdirectory(folderName);
-            contentEntry.addSourceFolder(resourceRoot.getVirtualFile(), test);
-            moduleRootModel.commit();
-            return resourceRoot;
+        private PsiDirectory findOrCreateSourceFolder(PsiDirectory moduleRoot, String folderName, boolean test) {
+            PsiDirectory directory = moduleRoot.findSubdirectory(folderName);
+            if (directory != null) return directory;
+            // folder not found, must create it
+            ModifiableRootModel modifiableRootModel = ModuleRootManager.getInstance(module).getModifiableModel();
+            ContentEntry contentEntry = modifiableRootModel.addContentEntry(moduleRoot.getVirtualFile());
+            directory = moduleRoot.createSubdirectory(folderName);
+            contentEntry.addSourceFolder(directory.getVirtualFile(), test);
+            modifiableRootModel.commit();
+            return directory;
         }
 
-        private PsiJavaFile createJavaFile(Project project, PsiDirectory directory, String fileName, String source) {
-            PsiJavaFile classFile = (PsiJavaFile) PsiFileFactory.getInstance(project).createFileFromText(fileName, StdFileTypes.JAVA, source);
-            classFile = (PsiJavaFile)directory.add(classFile);
-            return classFile;
-        }
-
-        private PsiFile createHtmlFile(Project project, PsiDirectory directory, String fileName, String source) {
-            PsiFile htmlFile = (PsiFile) PsiFileFactory.getInstance(project).createFileFromText(fileName, StdFileTypes.HTML, source);
-            htmlFile = (PsiFile)directory.add(htmlFile);
-            return htmlFile;
-        }
-
-        private void setSdk(ModifiableRootModel moduleRootModel) {
-            moduleRootModel.inheritSdk();
+        private PsiFile findOrCreateFile(Project project, PsiDirectory directory, String fileName, FileType type, String source) {
+            PsiFile file = directory.findFile(fileName);
+            if (file != null) return file;
+            file = PsiFileFactory.getInstance(project).createFileFromText(fileName, type, source);
+                        file = (PsiFile)directory.add(file);
+                        return file;
         }
 
         private String getModuleFilePath(PsiDirectory moduleRoot) {
             return moduleRoot.getVirtualFile().getPath() + File.separator + moduleName + ".iml";
         }
 
-        private void addTestLibraries(ModifiableRootModel moduleRootModel) {
-            String junitLibraryPath = PathUtil.getJarPathForClass(org.junit.Test.class);
-            addLibraryDependency(moduleRootModel, junitLibraryPath);
-
-            String hamcrestLibraryPath = PathUtil.getJarPathForClass(org.hamcrest.Matcher.class);
-            if (!junitLibraryPath.equals(hamcrestLibraryPath)) {
-                addLibraryDependency(moduleRootModel, hamcrestLibraryPath);
+        private void addJUnitLibraryDependency(ModifiableRootModel moduleRootModel) {
+            // add junit library
+            String junitJarPath = PathUtil.getJarPathForClass(org.junit.Test.class);
+            addLibraryDependency(moduleRootModel, junitJarPath);
+            // if the hamcrest classes are in a separate jar, add it too (as of JUnit 4.11, they are separate)
+            String hamcrestJarPath = PathUtil.getJarPathForClass(org.hamcrest.SelfDescribing.class);
+            if (!hamcrestJarPath.equals(junitJarPath)) {
+                addLibraryDependency(moduleRootModel, hamcrestJarPath);
             }
         }
 
