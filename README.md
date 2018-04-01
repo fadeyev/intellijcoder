@@ -12,8 +12,8 @@ Just like any other IntelliJ IDEA plugin:
 Usage
 -------------------------
 * Create new or open existing project in IntelliJ IDEA
+* Make sure Main Toolbar is shown! This is toolbar where TopCoder icon is located and it's hidden by default, Click `View -> Toolbar` to enable it
 * Press TopCoder button ![TopCoder icon](https://raw.github.com/fadeyev/intellijcoder/master/intellijcoder-idea/src/intellijcoder/idea/topcoder-icon.gif) on the main toolbar to launch Arena applet
-(please note, that the main toolbar is hidden by default, Click `View -> Toolbar` to enable it)
 * Login to Arena, then select a contest and open a problem
 * IntelliJCoder will automatically create a new module with a solution stub and a test class and run tests
 * After you finished editing your code, use Compile and Sumbit buttons in Arena to submit your code to TopCoder servers
@@ -23,7 +23,7 @@ Usage
 
 Screenshot
 -------------------------
-![TopCoder icon](http://intellijcoder.googlecode.com/files/screenshot.png)
+![Screeshot](/screenshot.png)
 
 Support
 -------------------------
