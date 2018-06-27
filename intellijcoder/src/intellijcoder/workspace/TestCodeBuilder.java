@@ -75,6 +75,14 @@ public class TestCodeBuilder extends CodeBuilder {
     }
 
     private String getValueLiteral(String type, String value) {
+        if(type.replaceAll(" ", "").contains("long[]")) {
+            String[] parts = value.replaceAll("\\{", "").replaceAll("}", "").split(",");
+            for (int i = 0; i < parts.length; ++i) {
+                parts[i] = parts[i].trim() + "L";
+            }
+            String newValue = "{" + String.join(", ", parts) + "}";
+            return "new " + type + " " + newValue;
+        }
         if(type.contains("[")) {
             return "new " + type + " " + value;
         }
