@@ -93,6 +93,18 @@ public class TestCodeBuilderTest {
     }
 
     @Test
+    public void usesArrayCreationSyntaxWhenParamTypeIsArrayOfLong() throws Exception {
+        TestCase testCase = make(a(TestCase, with(input, new String[] {"{1, 2}"})));
+        Problem problem = make(a(Problem,
+                with(paramTypes, new String[] {"long[]"}), with(paramNames, new String[]{"intervals"}),
+                with(testCases, new TestCase[]{ testCase })));
+        final String[] expectedTemplate = {
+                "public void test0()", "{", "intervals", "=", "new long[]", "{1L, 2L}" , "}"
+        };
+        verifyGeneratedTestClassTemplate(problem, expectedTemplate);
+    }
+
+    @Test
     public void usesArrayCreationSyntaxOnOutputWhenReturnTypeIsArray() throws Exception {
         TestCase testCase = make(a(TestCase, with(output, "{1, 2}")));
         Problem problem = make(a(Problem, with(returnType, "int[]"),
