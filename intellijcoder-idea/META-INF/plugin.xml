@@ -17,7 +17,7 @@
 
   <actions>
       <action id="IntelliJCoder.LaunchArena" class="intellijcoder.idea.LaunchArenaAction" text="Start Arena"
-              description="Starts TopCoder Competition Arena with IntelliJCoder as a default editor" icon="/intellijcoder/idea/topcoder-icon.gif">
+              description="Starts TopCoder Competition Arena with IntelliJCoder as a default editor" icon="/intellijcoder/idea/topcoder-icon.png">
           <add-to-group group-id="MainToolBar" anchor="last"/>
       </action>
   </actions>
