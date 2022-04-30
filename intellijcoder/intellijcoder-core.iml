@@ -12,15 +12,6 @@
     <orderEntry type="library" scope="TEST" name="JMock" level="project" />
     <orderEntry type="library" scope="TEST" name="JUnit" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="ContestApplet" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/jcip-annotations-1.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">
     <option name="_basePreferences">

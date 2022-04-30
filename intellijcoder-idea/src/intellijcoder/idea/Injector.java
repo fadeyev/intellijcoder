@@ -16,26 +16,29 @@ import intellijcoder.workspace.IdeWorkspaceManager;
 import intellijcoder.workspace.SolutionCodeBuilder;
 import intellijcoder.workspace.TestCodeBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Konstantin Fadeyev
- *         21.01.11
+ * 21.01.11
  */
 public class Injector {
 
-    private static IntelliJCoderApplication intelliJCoderInstance;
+    private static final Map<String, IntelliJCoderApplication> pluginInstances = new HashMap<>();
 
     static synchronized IntelliJCoderApplication injectIntelliJCoderApplication(Project project) {
-        if(intelliJCoderInstance == null) {
-            intelliJCoderInstance = new IntelliJCoderApplication(
-                injectArenaAppletProvider(),
-                injectArenaProcessLauncher(),
-                injectIntelliJCoderServer(project),
-                injectArenaConfigManager()
+        return pluginInstances.computeIfAbsent(project.getBasePath(), (basePath) -> {
+            IntelliJCoderApplication plugin = new IntelliJCoderApplication(
+                    injectArenaAppletProvider(),
+                    injectArenaProcessLauncher(),
+                    injectIntelliJCoderServer(project),
+                    injectArenaConfigManager()
             );
-            Application app = injectIntelliJIDEAApplication();
-            app.getMessageBus().connect(app).subscribe(AppLifecycleListener.TOPIC, injectIntelliJCoderFinalizer(intelliJCoderInstance));
-        }
-        return intelliJCoderInstance;
+            Application ide = injectIntelliJIDEAApplication();
+            ide.getMessageBus().connect(ide).subscribe(AppLifecycleListener.TOPIC, injectIntelliJCoderFinalizer(plugin));
+            return plugin;
+        });
     }
 
     private static Application injectIntelliJIDEAApplication() {
