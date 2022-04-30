@@ -253,6 +253,8 @@ public class IntelliJIDEA implements Ide {
                 public void run() {
                     ApplicationManager.getApplication().runWriteAction(new Runnable() {
                         public void run() {
+                            ProjectView.getInstance(project).selectPsiElement(testFile, false);
+                            FileEditorManager.getInstance(project).openFile(testFile.getVirtualFile(), true);
                             ProjectView.getInstance(project).selectPsiElement(classFile, false);
                             FileEditorManager.getInstance(project).openFile(classFile.getVirtualFile(), true);
                             createAndRunConfiguration();
