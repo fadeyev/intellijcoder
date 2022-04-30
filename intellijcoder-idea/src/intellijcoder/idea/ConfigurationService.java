@@ -1,5 +1,6 @@
 package intellijcoder.idea;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.*;
 import intellijcoder.model.SolutionCfg;
 import org.jetbrains.annotations.NotNull;
@@ -7,12 +8,14 @@ import org.jetbrains.annotations.NotNull;
 @State(
         name="IntelliJCoderConfiguration",
         storages = {
-                @Storage(file = StoragePathMacros.APP_CONFIG + "/IntelliJCoder.xml"),
+                @Storage(value="$APP_CONFIG$/IntelliJCoder.xml",
+                        roamingType = RoamingType.DISABLED),
         }
 )
-public class ConfigurationService implements PersistentStateComponent<SolutionCfg>, ApplicationComponent {
+@Service(value= {Service.Level.APP})
+public final class ConfigurationService implements PersistentStateComponent<SolutionCfg> {
     public static ConfigurationService getInstance() {
-        return ServiceManager.getService(ConfigurationService.class);
+        return ApplicationManager.getApplication().getService(ConfigurationService.class);
     }
 
     private SolutionCfg state = new SolutionCfg();
@@ -36,8 +39,4 @@ public class ConfigurationService implements PersistentStateComponent<SolutionCf
     public String getComponentName() {
         return "IntellijCoder.ConfigurationService";
     }
-
-    public void initComponent() {}
-
-    public void disposeComponent() {}
 }

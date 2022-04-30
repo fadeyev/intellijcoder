@@ -1,5 +1,6 @@
 package intellijcoder.idea;
 
+import com.intellij.ide.AppLifecycleListener;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -7,7 +8,6 @@ import com.intellij.util.PathUtil;
 import intellijcoder.arena.*;
 import intellijcoder.ipc.IntelliJCoderServer;
 import intellijcoder.main.IntelliJCoderApplication;
-import intellijcoder.model.SolutionCfg;
 import intellijcoder.os.DebugProcessLauncher;
 import intellijcoder.os.FileSystem;
 import intellijcoder.os.Network;
@@ -32,7 +32,8 @@ public class Injector {
                 injectIntelliJCoderServer(project),
                 injectArenaConfigManager()
             );
-            injectIntelliJIDEAApplication().addApplicationListener(injectIntelliJCoderFinalizer(intelliJCoderInstance));
+            Application app = injectIntelliJIDEAApplication();
+            app.getMessageBus().connect(app).subscribe(AppLifecycleListener.TOPIC, injectIntelliJCoderFinalizer(intelliJCoderInstance));
         }
         return intelliJCoderInstance;
     }
@@ -83,11 +84,15 @@ public class Injector {
     }
 
     private static TestCodeBuilder injectTestCodeBuilder() {
-        return new TestCodeBuilder(ConfigurationService.getInstance().getState());
+        return new TestCodeBuilder(injectConfigurationService().getState());
     }
 
     private static SolutionCodeBuilder injectSolutionCodeBuilder() {
-        return new SolutionCodeBuilder(ConfigurationService.getInstance().getState());
+        return new SolutionCodeBuilder(injectConfigurationService().getState());
+    }
+
+    private static ConfigurationService injectConfigurationService() {
+        return ConfigurationService.getInstance();
     }
 
     private static IntelliJIDEA injectIDE(Project project) {

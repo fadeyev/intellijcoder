@@ -1,6 +1,6 @@
 package intellijcoder.idea;
 
-import com.intellij.openapi.application.ApplicationAdapter;
+import com.intellij.ide.AppLifecycleListener;
 import intellijcoder.main.IntelliJCoderApplication;
 
 /**
@@ -9,7 +9,7 @@ import intellijcoder.main.IntelliJCoderApplication;
 * @author Konstantin Fadeyev
 *         23.01.11
 */
-class IntelliJCoderFinalizer extends ApplicationAdapter {
+class IntelliJCoderFinalizer implements AppLifecycleListener {
     private IntelliJCoderApplication intelliJCoderApplication;
 
     IntelliJCoderFinalizer(IntelliJCoderApplication intelliJCoderApplication) {
@@ -17,7 +17,7 @@ class IntelliJCoderFinalizer extends ApplicationAdapter {
     }
 
     @Override
-    public void applicationExiting() {
-        intelliJCoderApplication.shutdown();
+    public void appWillBeClosed(boolean isRestart) {
+        intelliJCoderApplication.shutdown();;
     }
 }

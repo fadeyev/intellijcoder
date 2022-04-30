@@ -1,19 +1,10 @@
-<idea-plugin version="2" url="https://github.com/fadeyev/intellijcoder">
+<idea-plugin url="https://github.com/fadeyev/intellijcoder">
   <name>IntelliJCoder</name>
-  <description>An IntelliJ IDEA plugin for TopCoder</description>
-  <version>2.1</version>
+  <description>IntelliJ IDEA plugin for TopCoder competitions</description>
+  <version>2.2</version>
   <vendor email="Konstantin.Fadeyev@gmail.com">Konstantin Fadeyev</vendor>
-  <idea-version since-build="133.193"/>
+  <idea-version since-build="211.6694"/>
   <depends>JUnit</depends>
-
-  <application-components>
-      <component>
-          <implementation-class>intellijcoder.idea.ConfigurationService</implementation-class>
-      </component>
-  </application-components>
-
-  <project-components>
-  </project-components>
 
   <actions>
       <action id="IntelliJCoder.LaunchArena" class="intellijcoder.idea.LaunchArenaAction" text="Start Arena"
@@ -25,5 +16,4 @@
   <extensions defaultExtensionNs="com.intellij">
       <applicationConfigurable  instance="intellijcoder.idea.ConfigurationForm" />
   </extensions>
-
 </idea-plugin>

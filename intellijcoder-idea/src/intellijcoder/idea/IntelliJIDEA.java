@@ -6,22 +6,30 @@ import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitUtil;
-import com.intellij.execution.junit.TestClassConfigurationProducer;
+import com.intellij.execution.junit.TestInClassConfigurationProducer;
 import com.intellij.ide.DataManager;
+import com.intellij.ide.browsers.OpenInBrowserRequest;
+import com.intellij.ide.browsers.WebBrowserService;
+import com.intellij.ide.browsers.WebBrowserUrlProvider;
+import com.intellij.ide.browsers.actions.WebPreviewVirtualFile;
+import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.projectView.ProjectView;
+import com.intellij.notification.*;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.ui.Messages;
@@ -30,18 +38,24 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.*;
 import com.intellij.util.PathUtil;
+import com.intellij.util.Url;
 import intellijcoder.main.IntelliJCoderException;
 import intellijcoder.model.SolutionCfg;
 
 import java.io.File;
+import java.util.Collection;
+
+import static com.intellij.ide.browsers.OpenInBrowserRequestKt.createOpenInBrowserRequest;
 
 /**
  * Do all the hard work in IDEA UI, creates modules, files, run configurations, etc.
  *
  * @author Konstantin Fadeyev
- *         15.01.11
+ * 15.01.11
  */
 public class IntelliJIDEA implements Ide {
+    private static Logger logger = Logger.getInstance(IntelliJIDEA.class);
+
     private static final String MESSAGE_BOXES_TITLE = "IntelliJCoder";
     private Project project;
 
@@ -90,13 +104,13 @@ public class IntelliJIDEA implements Ide {
 
     private Project getCurrentProject() throws IntelliJCoderException {
         //if project was closed
-        if(!project.isInitialized()) {
+        if (!project.isInitialized()) {
             // we try to locate project by currently focused component
             @SuppressWarnings({"deprecation"})
             DataContext dataContext = DataManager.getInstance().getDataContext();
-            project = DataKeys.PROJECT.getData(dataContext);
+            project = LangDataKeys.PROJECT.getData(dataContext);
         }
-        if(project == null) {
+        if (project == null) {
             throw new IntelliJCoderException("There is no opened project.");
         }
         return project;
@@ -227,7 +241,7 @@ public class IntelliJIDEA implements Ide {
                 public void run() {
                     ApplicationManager.getApplication().runWriteAction(new Runnable() {
                         public void run() {
-                            htmlFile = findOrCreateFile(project, moduleRoot.findSubdirectory(config.resourceFolderName), htmlFileName(className), StdFileTypes.HTML, htmlSource);
+                            htmlFile = findOrCreateFile(project, moduleRoot.findSubdirectory(config.resourceFolderName), htmlFileName(className), HtmlFileType.INSTANCE, htmlSource);
                             classFile = findOrCreateFile(project, moduleRoot.findSubdirectory(config.sourceFolderName), classFileName(className), JavaFileType.INSTANCE, classSource);
                             testFile = findOrCreateFile(project, moduleRoot.findSubdirectory(config.testFolderName), testClassFileName(className), JavaFileType.INSTANCE, testSource);
                         }
@@ -241,25 +255,46 @@ public class IntelliJIDEA implements Ide {
                         public void run() {
                             ProjectView.getInstance(project).selectPsiElement(classFile, false);
                             FileEditorManager.getInstance(project).openFile(classFile.getVirtualFile(), true);
-                            RunConfigurationProducer producer = new TestClassConfigurationProducer();
-                            ConfigurationFactory configurationFactory = producer.getConfigurationType().getConfigurationFactories()[0];
-                            RunnerAndConfigurationSettings settings = RunManager.getInstance(project).createRunConfiguration("", configurationFactory);
-                            final JUnitConfiguration configuration = (JUnitConfiguration) settings.getConfiguration();
-                            configuration.setModule(module);
-                            PsiClass testClass = JUnitUtil.getTestClass(testFile);
-                            configuration.beClassConfiguration(testClass);
-                            configuration.restoreOriginalModule(module);
-                            String vmParameters = configuration.getVMParameters();
-                            if (!vmParameters.isEmpty()) vmParameters += " ";
-                            configuration.setVMParameters(vmParameters + "-Xmx" + memLimit + "m");
-                            final RunManagerEx runManager = (RunManagerEx) RunManager.getInstance(project);
-                            runManager.setTemporaryConfiguration(settings);
-                            Executor executor = ExecutorRegistry.getInstance().getExecutorById(DefaultRunExecutor.EXECUTOR_ID);
-                            ProgramRunnerUtil.executeConfiguration(project, settings, executor);
+                            createAndRunConfiguration();
+                            openHtmlFilePreview();
                         }
                     });
                 }
             });
+        }
+
+        private void createAndRunConfiguration() {
+            Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdk();
+            if (projectSdk != null) {
+                RunConfigurationProducer producer = new TestInClassConfigurationProducer();
+                ConfigurationFactory configurationFactory = producer.getConfigurationType().getConfigurationFactories()[0];
+                RunnerAndConfigurationSettings settings = RunManager.getInstance(project).createConfiguration("", configurationFactory);
+                final JUnitConfiguration configuration = (JUnitConfiguration) settings.getConfiguration();
+                configuration.setModule(module);
+                PsiClass testClass = JUnitUtil.getTestClass(testFile);
+                configuration.beClassConfiguration(testClass);
+                configuration.restoreOriginalModule(module);
+                String vmParameters = configuration.getVMParameters();
+                if (!vmParameters.isEmpty()) vmParameters += " ";
+                configuration.setVMParameters(vmParameters + "-Xmx" + memLimit + "m");
+                final RunManagerEx runManager = (RunManagerEx) RunManager.getInstance(project);
+                runManager.setTemporaryConfiguration(settings);
+                Executor executor = ExecutorRegistry.getInstance().getExecutorById(DefaultRunExecutor.EXECUTOR_ID);
+                ProgramRunnerUtil.executeConfiguration(settings, executor);
+            }
+        }
+
+        private void openHtmlFilePreview() {
+            try {
+                OpenInBrowserRequest browserRequest = createOpenInBrowserRequest(htmlFile, false);
+                Collection<Url> urls = WebBrowserService.getInstance().getUrlsToOpen(browserRequest, true);
+                if (!urls.isEmpty()) {
+                    WebPreviewVirtualFile file = new WebPreviewVirtualFile(htmlFile.getVirtualFile(), urls.iterator().next());
+                    FileEditorManagerEx.getInstanceEx(project).openFileWithProviders(file, false, true);
+                }
+            } catch (WebBrowserUrlProvider.BrowserException e) {
+                logger.error("Failed to open browser to preview file " + htmlFile);
+            }
         }
 
         private PsiDirectory findOrCreateSourceFolder(PsiDirectory moduleRoot, String folderName, boolean test) {
@@ -278,8 +313,8 @@ public class IntelliJIDEA implements Ide {
             PsiFile file = directory.findFile(fileName);
             if (file != null) return file;
             file = PsiFileFactory.getInstance(project).createFileFromText(fileName, type, source);
-                        file = (PsiFile)directory.add(file);
-                        return file;
+            file = (PsiFile) directory.add(file);
+            return file;
         }
 
         private String getModuleFilePath(PsiDirectory moduleRoot) {
@@ -308,7 +343,7 @@ public class IntelliJIDEA implements Ide {
             libraryModel.commit();
 
             final LibraryOrderEntry orderEntry = moduleRootModel.findLibraryOrderEntry(jarLibrary);
-            if(orderEntry != null) {
+            if (orderEntry != null) {
                 orderEntry.setScope(DependencyScope.TEST);
             }
         }
