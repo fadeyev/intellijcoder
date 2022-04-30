@@ -1,19 +1,22 @@
 <idea-plugin url="https://github.com/fadeyev/intellijcoder">
-  <name>IntelliJCoder</name>
-  <description>IntelliJ IDEA plugin for TopCoder competitions</description>
-  <version>2.2</version>
-  <vendor email="Konstantin.Fadeyev@gmail.com">Konstantin Fadeyev</vendor>
-  <idea-version since-build="211.6694"/>
-  <depends>JUnit</depends>
+    <name>IntelliJCoder</name>
+    <description>IntelliJ IDEA plugin for TopCoder competitions</description>
+    <version>2.2</version>
+    <vendor email="Konstantin.Fadeyev@gmail.com">Konstantin Fadeyev</vendor>
+    <idea-version since-build="211.6694"/>
 
-  <actions>
-      <action id="IntelliJCoder.LaunchArena" class="intellijcoder.idea.LaunchArenaAction" text="Start Arena"
-              description="Starts TopCoder Competition Arena with IntelliJCoder as a default editor" icon="/intellijcoder/idea/topcoder-icon.png">
-          <add-to-group group-id="MainToolBar" anchor="last"/>
-      </action>
-  </actions>
+    <depends>JUnit</depends>
+    <depends>com.intellij.modules.java</depends>
 
-  <extensions defaultExtensionNs="com.intellij">
-      <applicationConfigurable  instance="intellijcoder.idea.ConfigurationForm" />
-  </extensions>
+    <actions>
+        <action id="IntelliJCoder.LaunchArena" class="intellijcoder.idea.LaunchArenaAction" text="Start Arena"
+                description="Starts TopCoder Competition Arena with IntelliJCoder as a default editor"
+                icon="/intellijcoder/idea/topcoder-icon.png">
+            <add-to-group group-id="MainToolBar" anchor="last"/>
+        </action>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable instance="intellijcoder.idea.ConfigurationForm"/>
+    </extensions>
 </idea-plugin>

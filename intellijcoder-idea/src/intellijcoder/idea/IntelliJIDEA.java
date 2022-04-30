@@ -7,7 +7,6 @@ import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitUtil;
 import com.intellij.execution.junit.TestInClassConfigurationProducer;
-import com.intellij.ide.DataManager;
 import com.intellij.ide.browsers.OpenInBrowserRequest;
 import com.intellij.ide.browsers.WebBrowserService;
 import com.intellij.ide.browsers.WebBrowserUrlProvider;
@@ -15,9 +14,6 @@ import com.intellij.ide.browsers.actions.WebPreviewVirtualFile;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.projectView.ProjectView;
-import com.intellij.notification.*;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.diagnostic.Logger;
@@ -43,6 +39,8 @@ import intellijcoder.main.IntelliJCoderException;
 import intellijcoder.model.SolutionCfg;
 
 import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.Collection;
 
 import static com.intellij.ide.browsers.OpenInBrowserRequestKt.createOpenInBrowserRequest;
@@ -54,30 +52,24 @@ import static com.intellij.ide.browsers.OpenInBrowserRequestKt.createOpenInBrows
  * 15.01.11
  */
 public class IntelliJIDEA implements Ide {
-    private static Logger logger = Logger.getInstance(IntelliJIDEA.class);
+    private static final Logger logger = Logger.getInstance(IntelliJIDEA.class);
 
     private static final String MESSAGE_BOXES_TITLE = "IntelliJCoder";
-    private Project project;
+    private final Project project;
 
     public IntelliJIDEA(Project project) {
         this.project = project;
     }
 
-    public void createModule(final String moduleName, final String className, final String classSource, final String testSource, final String htmlSource, final int memLimit) {
-        //We run it in the event thread, so the DataContext would have current Project data;
-        DumbService.getInstance(project).smartInvokeLater(new Runnable() {
-            public void run() {
-                ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                    public void run() {
-                        try {
-                            IntelliJIDEA.this.createModule(getCurrentProject(), moduleName, className, classSource, testSource, htmlSource, memLimit);
-                        } catch (IntelliJCoderException e) {
-                            showErrorMessage("Failed to create problem workspace. " + e.getMessage());
-                        }
+    public void createModule(final String moduleName, final String className, final String classSource, final String testSource, final String htmlSource, final int memLimit) throws IntelliJCoderException {
+        DumbService.getInstance(getCurrentProject()).smartInvokeLater(() ->
+                ApplicationManager.getApplication().runWriteAction(() -> {
+                    try {
+                        IntelliJIDEA.this.createModule(getCurrentProject(), moduleName, className, classSource, testSource, htmlSource, memLimit);
+                    } catch (IntelliJCoderException e) {
+                        showErrorMessage("Failed to create problem workspace. " + e.getMessage());
                     }
-                });
-            }
-        });
+                }));
     }
 
     static void showErrorMessage(String errorMessage) {
@@ -86,32 +78,20 @@ public class IntelliJIDEA implements Ide {
 
     public String getClassSource(final String className) {
         final String[] result = new String[1];
-        ApplicationManager.getApplication().invokeAndWait(new Runnable() {
-            public void run() {
-                ApplicationManager.getApplication().runReadAction(new Runnable() {
-                    public void run() {
-                        try {
-                            result[0] = IntelliJIDEA.this.getClassSource(getCurrentProject(), className);
-                        } catch (IntelliJCoderException e) {
-                            showErrorMessage(e.getMessage());
-                        }
+        ApplicationManager.getApplication().invokeAndWait(() ->
+                ApplicationManager.getApplication().runReadAction(() -> {
+                    try {
+                        result[0] = IntelliJIDEA.this.getClassSource(getCurrentProject(), className);
+                    } catch (IntelliJCoderException e) {
+                        showErrorMessage(e.getMessage());
                     }
-                });
-            }
-        }, ModalityState.NON_MODAL);
+                }), ModalityState.NON_MODAL);
         return result[0];
     }
 
     private Project getCurrentProject() throws IntelliJCoderException {
-        //if project was closed
         if (!project.isInitialized()) {
-            // we try to locate project by currently focused component
-            @SuppressWarnings({"deprecation"})
-            DataContext dataContext = DataManager.getInstance().getDataContext();
-            project = LangDataKeys.PROJECT.getData(dataContext);
-        }
-        if (project == null) {
-            throw new IntelliJCoderException("There is no opened project.");
+            throw new IntelliJCoderException("InteliJ IDEA project '" + project.getName() + "' was closed while TopCoder Arena was running. Please restart TopCoder Arena.");
         }
         return project;
     }
@@ -179,18 +159,18 @@ public class IntelliJIDEA implements Ide {
     }
 
     private static class ModuleCreator {
-        private Project project;
-        private String moduleName;
-        private String className;
-        private String classSource;
-        private String testSource;
-        private String htmlSource;
+        private final Project project;
+        private final String moduleName;
+        private final String className;
+        private final String classSource;
+        private final String testSource;
+        private final String htmlSource;
         PsiFile classFile;
         PsiFile testFile;
         PsiFile htmlFile;
         private Module module;
-        private SolutionCfg config;
-        private int memLimit;
+        private final SolutionCfg config;
+        private final int memLimit;
 
 
         public ModuleCreator(SolutionCfg config, Project project, String moduleName, String className, String classSource, String testSource, String htmlSource, int memLimit) {
@@ -217,7 +197,9 @@ public class IntelliJIDEA implements Ide {
          * Source, test, and resource folders will be created and added to the module if they don't already exist.
          */
         public void create() {
-            PsiDirectory projectRoot = PsiManager.getInstance(project).findDirectory(project.getBaseDir());
+            Path rootPath = FileSystems.getDefault().getPath(project.getBasePath());
+            VirtualFile projectRootVf = VirtualFileManager.getInstance().findFileByNioPath(rootPath);
+            PsiDirectory projectRoot = PsiManager.getInstance(project).findDirectory(projectRootVf);
             assert projectRoot != null;
             final PsiDirectory moduleRoot = getOrCreateModuleFolder(projectRoot, moduleName);
             module = ModuleManager.getInstance(project).findModuleByName(moduleName);
@@ -349,6 +331,5 @@ public class IntelliJIDEA implements Ide {
                 orderEntry.setScope(DependencyScope.TEST);
             }
         }
-
     }
 }
