@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/fadeyev/intellijcoder">
     <name>IntelliJCoder</name>
     <description>IntelliJ IDEA plugin for TopCoder competitions</description>
-    <version>2.2</version>
+    <version>2.4</version>
     <vendor email="Konstantin.Fadeyev@gmail.com">Konstantin Fadeyev</vendor>
     <idea-version since-build="211.6694"/>
 

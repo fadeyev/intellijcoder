@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ArenaAppletProvider {
-    public static final String TOPCODER_JNLP_URL = "http://www.topcoder.com/contest/arena/ContestAppletProd.jnlp";
+    public static final String TOPCODER_JNLP_URL = "https://www.topcoder.com/contest/arena/ContestAppletProd.jnlp";
     private final Network network;
     private final ArenaFileParser fileParser;
     private ArenaJarDownloader jarDownloader;
